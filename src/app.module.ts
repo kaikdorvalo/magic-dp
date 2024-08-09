@@ -5,11 +5,11 @@ import { DatabaseModule } from './modules/database/database.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
-  imports: [],
-  controllers: [],
-  providers: [
+  imports: [
     DatabaseModule,
     UserModule
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule { }
