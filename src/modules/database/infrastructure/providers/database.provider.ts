@@ -14,7 +14,7 @@ const dataSourceConfig = new DataSource({
     entities: [
         User
     ],
-    migrations: ["src/modules/database/infrastructure/migrations/*{.ts,.js}"],
+    migrations: ["dist/modules/database/infrastructure/migrations/*.js"],
     synchronize: false,
 });
 
