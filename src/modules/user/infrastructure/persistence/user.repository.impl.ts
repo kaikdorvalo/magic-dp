@@ -1,4 +1,4 @@
-import { DataSource, Repository } from "typeorm";
+import { DataSource, DeepPartial, Repository } from "typeorm";
 import { User } from "../../domain/entities/user.entity";
 import { UserRepository } from "../../domain/repositories/user.repository";
 import { Inject } from "@nestjs/common";
@@ -12,7 +12,19 @@ export class UserRepositoryImpl extends Repository<User> implements UserReposito
         super(User, dataSource.createEntityManager())
     }
 
-    getUserById(id: number): Promise<User | null> {
-        return this.findOneBy({ id: id });
+    createUser(entityLike: DeepPartial<User>): User {
+        return this.create(entityLike);
+    }
+
+    async saveUser(user: DeepPartial<User>): Promise<User> {
+        return await this.save(user);
+    }
+
+    async getUserById(id: number): Promise<User | null> {
+        return await this.findOneBy({ id: id });
+    }
+
+    async getUserByEmail(email: string): Promise<User | null> {
+        return await this.findOneBy({ email: email });
     }
 }
