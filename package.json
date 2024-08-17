@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "npm run build && npx typeorm -d dist/modules/database/infrastructure/providers/database.provider.js",
     "migration:generate": "npm run typeorm -- migration:generate src/modules/database/infrastructure/migrations/public-schema",
-    "migration:run": "npm run typeorm -- migration:run src/modules/database/infrastructure/migrations",
+    "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert"
   },
   "dependencies": {
