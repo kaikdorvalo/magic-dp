@@ -1,30 +1,33 @@
 import { DataSource, DeepPartial, Repository } from "typeorm";
-import { User } from "../../domain/entities/user.entity";
+import { User, UserDocument } from "../../domain/entities/user.entity";
 import { UserRepository } from "../../domain/repositories/user.repository";
 import { Inject } from "@nestjs/common";
 import { DataSources } from "src/shared/constants/datasources.constants";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
 
-export class UserRepositoryImpl extends Repository<User> implements UserRepository {
+export class UserRepositoryImpl implements UserRepository {
     constructor(
-        @Inject(DataSources.PUBLIC_DATASOURCE)
-        private dataSource: DataSource
-    ) {
-        super(User, dataSource.createEntityManager())
+        @InjectModel(User.name) private readonly userModel: Model<User>
+    ) { }
+
+    createUser(user: Partial<User>): UserDocument {
+        return new this.userModel(user);
     }
 
-    createUser(entityLike: DeepPartial<User>): User {
-        return this.create(entityLike);
-    }
-
-    async saveUser(user: DeepPartial<User>): Promise<User> {
-        return await this.save(user);
+    async saveUser(user: User): Promise<User> {
+        const newUser = new this.userModel(user);
+        const savedUser = await newUser.save();
+        const object = savedUser.toObject();
+        delete object.password;
+        return object;
     }
 
     async getUserById(id: number): Promise<User | null> {
-        return await this.findOneBy({ id: id });
+        return await this.userModel.findById(id);
     }
 
     async getUserByEmail(email: string): Promise<User | null> {
-        return await this.findOneBy({ email: email });
+        return await this.userModel.findOne({ email: email });
     }
 }

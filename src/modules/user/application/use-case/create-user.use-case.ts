@@ -6,6 +6,7 @@ import { UserService } from "../../domain/services/user.service";
 import { ResponseData } from "src/shared/utils/response-data";
 import { UserAlreadyExistsException } from "src/shared/exceptions/user/user-already-exists.exception";
 import { httpExceptionHandler } from "src/shared/utils/exception-handler";
+import { User } from "../../domain/entities/user.entity";
 
 @Injectable()
 export class CreateUserUseCase {
@@ -27,12 +28,11 @@ export class CreateUserUseCase {
 
             const newUser = this.userRepository.createUser(createUserDto);
             newUser.password = await this.userService.hashPassword(newUser.password);
-            await this.userRepository.saveUser(newUser)
-            const savedUser = { ...newUser, password: undefined }
+            const save = await this.userRepository.saveUser(newUser)
 
             return new ResponseData(
                 HttpStatus.CREATED,
-                savedUser
+                save
             )
         } catch (err: any) {
             httpExceptionHandler(err);

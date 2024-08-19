@@ -3,18 +3,22 @@ import { TableNames } from "src/shared/constants/table-names.constants";
 import { USER_TABLE } from "src/shared/constants/tables.constants";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import "dotenv/config"
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 
-@Entity({ name: TableNames.USER, schema: process.env.DATABASE_PUBLIC_SCHEMA })
+export type UserDocument = User & Document;
+
+@Schema()
 export class User {
-    @PrimaryGeneratedColumn({ name: USER_TABLE.ID })
-    id: number;
 
-    @Column({ name: USER_TABLE.NAME })
+    @Prop({ required: true })
     name: string;
 
-    @Column({ name: USER_TABLE.EMAIL })
+    @Prop({ required: true })
     email: string;
 
-    @Column({ name: USER_TABLE.PASSWORD })
+    @Prop({ required: true })
     password: string;
 }
+
+export const UserSchema = SchemaFactory.createForClass(User)

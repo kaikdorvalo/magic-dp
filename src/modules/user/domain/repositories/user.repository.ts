@@ -1,8 +1,8 @@
 import { DeepPartial, Repository } from "typeorm";
-import { User } from "../entities/user.entity";
+import { User, UserDocument } from "../entities/user.entity";
 
 export interface UserRepository {
-    createUser(entityLike: DeepPartial<User>): User
+    createUser(user: Partial<User>): UserDocument
 
     saveUser(user: User): Promise<User>
 

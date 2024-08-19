@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { DatabaseModule } from './modules/database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { CardModule } from './modules/card/card.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    DatabaseModule,
+    MongooseModule.forRoot('mongodb://localhost:27017/magic_dp'),
     UserModule,
-    CardModule
+    // CardModule
   ],
   controllers: [],
   providers: [],
