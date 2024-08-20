@@ -7,7 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/magic_dp'),
     UserModule,
-    // CardModule
+    CardModule
   ],
   controllers: [],
   providers: [],

@@ -13,7 +13,7 @@ export class CardController {
 
     @Post('commander')
     async createDeck(@Body() createDeckDto: CreateDeckDto) {
-        return this.getCommanderUseCase.execute(createDeckDto.commanderName);
+        return await this.getCommanderUseCase.execute(createDeckDto.commanderName);
     }
 
 }

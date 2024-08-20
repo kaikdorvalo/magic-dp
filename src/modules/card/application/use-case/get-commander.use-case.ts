@@ -14,5 +14,8 @@ export class GetCommanderUseCase {
             throw new CommanderNotFoundException();
         }
         return commander
+
+        // const lands = await this.scryfallApi.getLands();
+        // return lands
     }
 }
