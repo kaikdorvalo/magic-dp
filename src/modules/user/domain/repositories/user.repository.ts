@@ -1,5 +1,5 @@
 import { DeepPartial, Repository } from "typeorm";
-import { User, UserDocument } from "../entities/user.entity";
+import { User, UserDocument } from "../schemas/user.schema";
 
 export interface UserRepository {
     createUser(user: Partial<User>): UserDocument

@@ -6,7 +6,7 @@ import { UserService } from "../../domain/services/user.service";
 import { ResponseData } from "src/shared/utils/response-data";
 import { UserAlreadyExistsException } from "src/shared/exceptions/user/user-already-exists.exception";
 import { httpExceptionHandler } from "src/shared/utils/exception-handler";
-import { User } from "../../domain/entities/user.entity";
+import { User } from "../../domain/schemas/user.schema";
 
 @Injectable()
 export class CreateUserUseCase {

@@ -1,5 +1,5 @@
 import { DataSource, DeepPartial, Repository } from "typeorm";
-import { User, UserDocument } from "../../domain/entities/user.entity";
+import { User, UserDocument } from "../../domain/schemas/user.schema";
 import { UserRepository } from "../../domain/repositories/user.repository";
 import { Inject } from "@nestjs/common";
 import { DataSources } from "src/shared/constants/datasources.constants";

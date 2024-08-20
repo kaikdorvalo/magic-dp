@@ -5,7 +5,7 @@ import { UserRepositoryImpl } from "./infrastructure/persistence/user.repository
 import { CreateUserUseCase } from "./application/use-case/create-user.use-case";
 import { UserService } from "./domain/services/user.service";
 import { MongooseModule } from "@nestjs/mongoose";
-import { User, UserSchema } from "./domain/entities/user.entity";
+import { User, UserSchema } from "./domain/schemas/user.schema";
 
 @Module({
     imports: [
