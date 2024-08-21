@@ -12,6 +12,8 @@ export class GenerateDeckUseCase {
 
     async execute(createDeckDto: CreateDeckDto) {
         const commander = await this.getCommanderUseCase.execute(createDeckDto.commanderName)
-        return commander;
+        const basicLands = await this.getBasicLandsUseCase.execute(commander);
+        return basicLands;
+        // return commander;
     }
 }
