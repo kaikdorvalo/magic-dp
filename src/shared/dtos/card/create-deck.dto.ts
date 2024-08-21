@@ -10,10 +10,9 @@ export class CreateDeckDto {
     })
     commanderName: string;
 
-    @IsOptional()
     @IsNumber()
     @ApiProperty({
         description: 'The number of lands required',
     })
-    landsAmount?: number
+    landsAmount: number
 }

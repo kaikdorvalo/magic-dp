@@ -4,6 +4,8 @@ import axios from "axios";
 import { Response } from "express";
 import { timeout } from "rxjs";
 import { CommanderNotFoundException } from "src/shared/exceptions/card/commander-bot-found.exception";
+import { Card } from "../../domain/schemas/deck.schema";
+import { Unique } from "typeorm";
 
 @Injectable()
 export class ScryfallApi {
@@ -49,5 +51,62 @@ export class ScryfallApi {
         }
     }
 
-    async getCardsByCommander() { }
+    async getCardsByCommander(commander: Card, cardsAmount: number): Promise<any[]> {
+        const query = this.generateQueryColor(commander);
+        const availablePages = 41;
+        const searchedCards: Card[] = [];
+        const promiseCards: Promise<any>[] = [];
+        let page = 1;
+
+        do {
+            promiseCards.push(
+                axios.get(`${this.baseUrl}/cards/search`, {
+                    params: {
+                        q: `is:noncommander t:creature (${query})`,
+                        page: page,
+                        unique: 'cards'
+                    }
+                })
+            )
+
+            page++;
+        } while (page <= availablePages);
+
+        const cardGroups = await Promise.all(promiseCards);
+
+        for (let group of cardGroups) {
+            for (let item of group.data.data) {
+                searchedCards.push(item);
+            }
+        }
+
+        return this.removeLegendaryCreatures(searchedCards);
+    }
+
+    private removeLegendaryCreatures(searched: Card[]): Card[] {
+        const cards: Card[] = [];
+
+        searched.forEach((card) => {
+            if (!card.type_line.includes('Legendary Creature')) {
+                cards.push(card);
+            }
+        })
+
+        return cards;
+    }
+
+    private generateQueryColor(commander: Card): string {
+        let query: string = '';
+        let colors = commander.colors;
+
+        for (let i = 0; i < colors.length; i++) {
+            if (i !== colors.length - 1) {
+                query = query + `c:${colors[i]} or `;
+            } else {
+                query = query + `c:${colors[i]}`;
+            }
+        }
+
+        return query;
+    }
 }

@@ -8,7 +8,16 @@ export class GetCardsByCommanderUseCase {
         private readonly scryfallApi: ScryfallApi
     ) { }
 
-    async execute(commander: Card) {
+    async execute(commander: Card, cardsAmount: number): Promise<any[]> {
+        const searchedCards = await this.scryfallApi.getCardsByCommander(commander, cardsAmount);
+        const cards: Card[] = [];
+        const cardsCount = searchedCards.length;
 
+        for (let i = 0; i < cardsAmount; i++) {
+            const randomNumber = Math.floor(Math.random() * cardsCount);
+            cards.push(searchedCards[randomNumber]);
+        }
+
+        return cards;
     }
 }
