@@ -14,7 +14,7 @@ export class GetBasicLandsByCommanderUseCase {
         const validBasicLands: Card[] = [];
 
         lands.forEach((card) => {
-            if (commander.colors.includes(card.color_identity[0])) {
+            if (commander.color_identity.includes(card.color_identity[0])) {
                 validBasicLands.push(card);
             }
         })

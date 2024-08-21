@@ -31,19 +31,33 @@ export class GenerateDeckUseCase {
 
         if (searchAmount > 0) {
             searchedCards = await this.getCardsByCommanderUseCase.execute(commander, searchAmount);
-            console.log(searchedCards.length)
 
             for (let card of searchedCards) {
                 if (card.type_line.includes('Legendary Creature')) {
                     console.log('lendaria')
                 }
             }
-            return [
-            ]
         }
 
-        // console.log(lands.length)
-        // return lands;
-        // return commander;
+        const deck: Card[] = this.buildDeck(commander, lands, searchedCards);
+        console.log(deck.length);
+
+        return deck;
+    }
+
+    private buildDeck(commander: Card, lands: Card[], cards: Card[]): Card[] {
+        const deck: Card[] = [];
+
+        deck.push(commander);
+
+        for (let land of lands) {
+            deck.push(land);
+        }
+
+        for (let card of cards) {
+            deck.push(card);
+        }
+
+        return deck
     }
 }
