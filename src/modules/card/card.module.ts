@@ -3,12 +3,18 @@ import { GetCommanderUseCase } from "./application/use-case/get-commander.use-ca
 import { CardService } from "./domain/services/card.service";
 import { CardController } from "./presentation/controllers/card.controller";
 import { ScryfallApi } from "./application/api/scryfall-api";
+import { GetBasicLandsByCommanderUseCase } from "./application/use-case/get-basic-lands-by-commander.use-case";
+import { GetCardsByCommanderUseCase } from "./application/use-case/get-cards-by-commander.use-case";
+import { GenerateDeckUseCase } from "./application/use-case/generate-deck.use-case";
 
 @Module({
     providers: [
         ScryfallApi,
         CardService,
-        GetCommanderUseCase
+        GetCommanderUseCase,
+        GetBasicLandsByCommanderUseCase,
+        GetCardsByCommanderUseCase,
+        GenerateDeckUseCase
     ],
     controllers: [
         CardController

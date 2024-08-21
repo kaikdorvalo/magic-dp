@@ -105,7 +105,7 @@ class CardPurchaseUris {
 }
 
 @Schema()
-export class Deck {
+export class Card {
     @Prop()
     object: string
     @Prop()
@@ -234,7 +234,16 @@ export class Deck {
     related_uris: CardRelatedUris
     @Prop()
     purchase_uris: CardPurchaseUris
+}
 
+@Schema()
+export class Deck {
+    @Prop({ required: true })
+    commander: string
+    @Prop({ required: true })
+    lands: number
+    @Prop({ required: true })
+    cards: Card[]
 }
 
 

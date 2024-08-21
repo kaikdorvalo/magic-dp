@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateDeckDto {
 
@@ -8,5 +8,12 @@ export class CreateDeckDto {
     @ApiProperty({
         description: "Commander name"
     })
-    commanderName: string
+    commanderName: string;
+
+    @IsOptional()
+    @IsNumber()
+    @ApiProperty({
+        description: 'The number of lands required',
+    })
+    landsAmount?: number
 }

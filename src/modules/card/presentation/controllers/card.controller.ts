@@ -2,18 +2,24 @@ import { Body, Controller, Post, UseFilters } from "@nestjs/common";
 import { CreateDeckDto } from "src/shared/dtos/card/create-deck.dto";
 import { GetCommanderUseCase } from "../../application/use-case/get-commander.use-case";
 import { HttpExceptionFilter } from "src/shared/exceptions-filter/http-exception.exception-filter";
+import { GenerateDeckUseCase } from "../../application/use-case/generate-deck.use-case";
+import { ApiBody, ApiResponse } from "@nestjs/swagger";
+import { CreateUserDto } from "src/shared/dtos/user/create-user.dto";
 
 @Controller('cards')
 @UseFilters(new HttpExceptionFilter())
 export class CardController {
 
     constructor(
-        private getCommanderUseCase: GetCommanderUseCase
+        private generateDeckUseCase: GenerateDeckUseCase
     ) { }
 
     @Post('commander')
+    @ApiBody({
+        type: CreateDeckDto
+    })
     async createDeck(@Body() createDeckDto: CreateDeckDto) {
-        return await this.getCommanderUseCase.execute(createDeckDto.commanderName);
+        return await this.generateDeckUseCase.execute(createDeckDto);
     }
 
 }
