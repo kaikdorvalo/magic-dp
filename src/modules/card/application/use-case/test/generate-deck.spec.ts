@@ -1,17 +1,16 @@
-import { request, Request } from "express"
 import { Model } from "mongoose"
-import { ScryfallApi } from "src/modules/card/application/api/scryfall-api"
-import { GenerateDeckUseCase } from "src/modules/card/application/use-case/generate-deck.use-case"
-import { GetBasicLandsByCommanderUseCase } from "src/modules/card/application/use-case/get-basic-lands-by-commander.use-case"
-import { GetCardsByCommanderUseCase } from "src/modules/card/application/use-case/get-cards-by-commander.use-case"
-import { GetCommanderUseCase } from "src/modules/card/application/use-case/get-commander.use-case"
-import { Card, Deck } from "src/modules/card/domain/schemas/deck.schema"
-import { CardService } from "src/modules/card/domain/services/card.service"
-import { CardRepositroy } from "src/modules/card/infrastructure/persistence/card.repository.impl"
-import { IUser } from "src/modules/user/application/interfaces/user.interface"
-import { User } from "src/modules/user/domain/schemas/user.schema"
-import { UserRepositoryImpl } from "src/modules/user/infrastructure/persistence/user.repository.impl"
-import { CreateDeckDto } from "src/shared/dtos/card/create-deck.dto"
+import { ScryfallApi } from "../../../../../modules/card/application/api/scryfall-api"
+import { GenerateDeckUseCase } from "../../../../../modules/card/application/use-case/generate-deck.use-case"
+import { GetBasicLandsByCommanderUseCase } from "../../../../../modules/card/application/use-case/get-basic-lands-by-commander.use-case"
+import { GetCardsByCommanderUseCase } from "../../../../../modules/card/application/use-case/get-cards-by-commander.use-case"
+import { GetCommanderUseCase } from "../../../../../modules/card/application/use-case/get-commander.use-case"
+import { Card, Deck } from "../../../../../modules/card/domain/schemas/deck.schema"
+import { CardService } from "../../../../../modules/card/domain/services/card.service"
+import { CardRepositroy } from "../../../../../modules/card/infrastructure/persistence/card.repository.impl"
+import { IUser } from "../../../../../modules/user/application/interfaces/user.interface"
+import { User } from "../../../../../modules/user/domain/schemas/user.schema"
+import { UserRepositoryImpl } from "../../../../../modules/user/infrastructure/persistence/user.repository.impl"
+import { CreateDeckDto } from "../../../../../shared/dtos/card/create-deck.dto"
 
 describe('Generate deck test', () => {
     const scryfallApi = new ScryfallApi()
@@ -21,8 +20,16 @@ describe('Generate deck test', () => {
     const getBasicLandsUseCase = new GetBasicLandsByCommanderUseCase(scryfallApi)
     const getCardsByCommander = new GetCardsByCommanderUseCase(scryfallApi)
 
-    const cardRepository = new CardRepositroy(new Model<Deck>)
-    const userRepository = new UserRepositoryImpl(new Model<User>)
+    const cardModel = {
+
+    } as unknown as Model<Deck>
+
+    const userModel = {
+
+    } as unknown as Model<User>
+
+    const cardRepository = new CardRepositroy(cardModel)
+    const userRepository = new UserRepositoryImpl(userModel)
 
 
     const generateDeckUseCase = new GenerateDeckUseCase(
@@ -34,24 +41,54 @@ describe('Generate deck test', () => {
         userRepository
     )
 
-    it('Should generate deck', async () => {
-        const deckDto: CreateDeckDto = {
-            commanderName: "Dina Imbuidora de Almas",
-            landsAmount: 30
-        }
+    it('Should get Commander by name', async () => {
+        const commander = await getCommanderUseCase.execute('Dina Imbuidora de Almas');
+        const isCommander = commander.type_line.includes('Legendary Creature')
 
-        const user: IUser = {
-            _id: "userId",
-            name: "",
-            email: "",
-            password: ""
-        }
+        expect(commander).toBeDefined()
+        expect(isCommander).toBe(true);
+    })
 
-        jest.spyOn(userRepository, 'getUserById').mockReturnValue(Promise.resolve(user))
-        jest.spyOn(cardRepository, 'saveDeck').mockReturnValue(Promise.resolve(true));
+    it('Should get basic lands for commander', async () => {
+        const commander = await getCommanderUseCase.execute('Dina Imbuidora de Almas');
+        const isCommander = commander.type_line.includes('Legendary Creature')
 
-        const deck = await generateDeckUseCase.execute(deckDto, "userId")
+        const lands = await getBasicLandsUseCase.execute(commander);
 
-        console.log(deck)
+        const map = lands.map((el) => {
+            return commander.color_identity.includes(el.color_identity[0]);
+        })
+
+        const correctLandsForCommander = !map.includes(false)
+
+        console.log(correctLandsForCommander)
+
+        expect(correctLandsForCommander).toBe(true)
+        expect(commander).toBeDefined()
+        expect(isCommander).toBe(true);
+    })
+
+    it('Should get correct cards for commander', async () => {
+        const commander = await getCommanderUseCase.execute('Dina Imbuidora de Almas');
+        const isCommander = commander.type_line.includes('Legendary Creature')
+
+        const cards = await getCardsByCommander.execute(commander, 99);
+
+        const map = cards.map((el) => {
+            let correct = false;
+            for (let color of commander.color_identity) {
+                if (el.color_identity.includes(color)) {
+                    correct = true;
+                }
+            }
+
+            return correct
+        })
+
+        const isCorrectColor = !map.includes(false)
+
+        expect(isCorrectColor).toBe(true)
+        expect(commander).toBeDefined()
+        expect(isCommander).toBe(true);
     })
 })
