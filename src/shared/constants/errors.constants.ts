@@ -3,5 +3,6 @@ export const Errors = {
     USER_ALREADY_EXISTS: 'User already exists.',
     COMMANDER_NOT_FOUND: 'Commander not found.',
     NOT_COMMANDER: "This card isn't a valid commander.",
-    INVALID_LANDS_AMOUNT: 'Invalid lands amount.'
+    INVALID_LANDS_AMOUNT: 'Invalid lands amount.',
+    UNAUTHORIZED: "Unauthorized"
 }
