@@ -11,6 +11,8 @@ import { UserModule } from "../user/user.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Deck, DeckSchema } from "./domain/schemas/deck.schema";
 import { CardRepositroy } from "./infrastructure/persistence/card.repository.impl";
+import { GetDeckByIdUseCase } from "./application/use-case/get-deck-by-id.use-case";
+import { ExportDeckToJsonUseCase } from "./application/use-case/export-deck-to-json.use-case";
 
 @Module({
     imports: [
@@ -26,6 +28,8 @@ import { CardRepositroy } from "./infrastructure/persistence/card.repository.imp
         GetBasicLandsByCommanderUseCase,
         GetCardsByCommanderUseCase,
         GenerateDeckUseCase,
+        GetDeckByIdUseCase,
+        ExportDeckToJsonUseCase
     ],
     controllers: [
         CardController

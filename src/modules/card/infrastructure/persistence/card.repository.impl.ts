@@ -18,4 +18,9 @@ export class CardRepositroy {
         const savedDeck = await newUser.save();
         return savedDeck;
     }
+
+    async getById(_id: string): Promise<Deck> {
+        const deck = await this.deckModel.findById(_id)
+        return deck;
+    }
 }
