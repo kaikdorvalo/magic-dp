@@ -1,18 +1,17 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
-import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
+import { Injectable } from "@nestjs/common";
 import axios from "axios";
-import { Response } from "express";
-import { timeout } from "rxjs";
-import { CommanderNotFoundException } from "src/shared/exceptions/card/commander-bot-found.exception";
 import { Card } from "../../domain/schemas/deck.schema";
-import { Unique } from "typeorm";
+import * as http from 'http'
+import * as https from 'https'
 
 @Injectable()
 export class ScryfallApi {
     private baseUrl: string = 'https://api.scryfall.com';
     private api = axios.create({
         baseURL: this.baseUrl,
-        timeout: 10000
+        timeout: 10000,
+        httpAgent: new http.Agent({ keepAlive: true }),
+        httpsAgent: new https.Agent({ keepAlive: true }),
     })
 
     async getCommanderByName(name: string) {
