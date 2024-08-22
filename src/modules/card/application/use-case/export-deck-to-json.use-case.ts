@@ -6,6 +6,7 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 import { ExportDeckErrorException } from "src/shared/exceptions/card/export-deck-error.exception";
 import { ResponseData } from "src/shared/utils/response-data";
+import { httpExceptionHandler } from "src/shared/utils/exception-handler";
 
 @Injectable()
 export class ExportDeckToJsonUseCase {
@@ -14,19 +15,23 @@ export class ExportDeckToJsonUseCase {
     ) { }
 
     async execute(id: string, userId: string) {
-        const deck = await this.getDeckByIdUseCase.execute(id, userId);
-        const cards: Card[] = deck.data.cards;
+        try {
+            const deck = await this.getDeckByIdUseCase.execute(id, userId);
+            const cards: Card[] = deck.data.cards;
 
-        const timestamp = Date.now();
-        const filePath = path.join(__dirname, '..', '..', '..', '..', 'shared', `${deck.data._id}_deck.json`);
+            const timestamp = Date.now();
+            const filePath = path.join(__dirname, '..', '..', '..', '..', 'shared', `${deck.data._id}_deck.json`);
 
-        await this.createFile(path.dirname(filePath));
-        await this.createJson(cards, filePath);
+            await this.createFile(path.dirname(filePath));
+            await this.createJson(cards, filePath);
 
-        return new ResponseData(
-            HttpStatus.CREATED,
-            "exported file"
-        )
+            return new ResponseData(
+                HttpStatus.CREATED,
+                "exported file"
+            )
+        } catch (err: any) {
+            httpExceptionHandler(err);
+        }
     }
 
     async createJson(cards: Card[], filePath: string) {

@@ -12,6 +12,7 @@ import { UserRepository } from "src/modules/user/domain/repositories/user.reposi
 import { Repositories } from "src/shared/constants/repositories.constants";
 import { CardRepositroy } from "../../infrastructure/persistence/card.repository.impl";
 import { ResponseData } from "src/shared/utils/response-data";
+import { httpExceptionHandler } from "src/shared/utils/exception-handler";
 
 @Injectable()
 export class GenerateDeckUseCase {
@@ -29,39 +30,43 @@ export class GenerateDeckUseCase {
     ) { }
 
     async execute(createDeckDto: CreateDeckDto, request: Request) {
-        const commander = await this.getCommanderUseCase.execute(createDeckDto.commanderName)
-        const availableBasicLands = await this.getBasicLandsUseCase.execute(commander);
+        try {
+            const commander = await this.getCommanderUseCase.execute(createDeckDto.commanderName)
+            const availableBasicLands = await this.getBasicLandsUseCase.execute(commander);
 
-        if (!this.cardService.validateLandsAmount(createDeckDto.landsAmount)) {
-            throw new InvalidLandsAmountException();
-        }
+            if (!this.cardService.validateLandsAmount(createDeckDto.landsAmount)) {
+                throw new InvalidLandsAmountException();
+            }
 
-        const lands: Card[] = this.cardService.randomLands(availableBasicLands, createDeckDto.landsAmount);
-        const searchAmount = 99 - lands.length;
-        let searchedCards: Card[] = [];
+            const lands: Card[] = this.cardService.randomLands(availableBasicLands, createDeckDto.landsAmount);
+            const searchAmount = 99 - lands.length;
+            let searchedCards: Card[] = [];
 
-        if (searchAmount > 0) {
-            searchedCards = await this.getCardsByCommanderUseCase.execute(commander, searchAmount);
+            if (searchAmount > 0) {
+                searchedCards = await this.getCardsByCommanderUseCase.execute(commander, searchAmount);
 
-            for (let card of searchedCards) {
-                if (card.type_line.includes('Legendary Creature')) {
-                    console.log('lendaria')
+                for (let card of searchedCards) {
+                    if (card.type_line.includes('Legendary Creature')) {
+                        console.log('lendaria')
+                    }
                 }
             }
+
+            const deck: Card[] = this.buildDeck(commander, lands, searchedCards);
+            console.log(deck.length);
+
+            const requestUser = request["user"];
+            const user = await this.userRepository.getUserById(requestUser.sub);
+
+            const savedDeck = await this.persistDeck(commander, lands.length, deck, user._id);
+
+            return new ResponseData(
+                HttpStatus.CREATED,
+                savedDeck
+            )
+        } catch (err: any) {
+            httpExceptionHandler(err)
         }
-
-        const deck: Card[] = this.buildDeck(commander, lands, searchedCards);
-        console.log(deck.length);
-
-        const requestUser = request["user"];
-        const user = await this.userRepository.getUserById(requestUser.sub);
-
-        const savedDeck = await this.persistDeck(commander, lands.length, deck, user._id);
-
-        return new ResponseData(
-            HttpStatus.CREATED,
-            savedDeck
-        )
     }
 
     private buildDeck(commander: Card, lands: Card[], cards: Card[]): Card[] {
