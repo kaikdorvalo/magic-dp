@@ -16,6 +16,7 @@ export class GetCommanderUseCase {
             throw new CommanderNotFoundException();
         }
 
+
         if (!commander.type_line.includes("Legendary Creature")) {
             throw new NotCommanderException();
         }

@@ -17,6 +17,11 @@ export class ScryfallApi {
     async getCommanderByName(name: string) {
         try {
             const res = await this.api.get(`/cards/named?fuzzy=${name}`)
+            if (res.status !== 200) {
+                return null
+            }
+            console.log('status')
+            console.log(res.status)
             const commander = res.data;
             return commander;
         } catch (err: any) {
@@ -52,10 +57,17 @@ export class ScryfallApi {
 
     async getCardsByCommander(commander: Card, cardsAmount: number): Promise<any[]> {
         const query = this.generateQueryColor(commander);
-        const availablePages = 41;
         const searchedCards: Card[] = [];
         const promiseCards: Promise<any>[] = [];
         let page = 1;
+
+        const firstRes = await axios.get(`${this.baseUrl}/cards/search`, {
+            params: {
+                q: `is:noncommander t:creature (${query})`,
+                unique: 'cards'
+            }
+        })
+        const availablePages = Math.ceil(firstRes.data.total_cards / 175);
 
         do {
             promiseCards.push(
