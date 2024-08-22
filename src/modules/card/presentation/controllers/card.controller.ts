@@ -40,7 +40,7 @@ export class CardController {
     @Get('decks/exports/:id')
     async exportDeckToJson(@Param('id') id: string, @Req() request: Request, @Res() response: Response) {
         const result = await this.exportDeckToJsonUseCase.execute(id, request["user"].sub);
-        return response.status(200).send()
+        return response.status(result.status).send(result.data)
     }
 
 }

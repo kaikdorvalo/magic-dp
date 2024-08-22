@@ -5,5 +5,6 @@ export const Errors = {
     NOT_COMMANDER: "This card isn't a valid commander.",
     INVALID_LANDS_AMOUNT: 'Invalid lands amount.',
     UNAUTHORIZED: "Unauthorized",
-    DECK_NOT_FOUND: 'Deck not found.'
+    DECK_NOT_FOUND: 'Deck not found.',
+    EXPORT_DECK_ERROR: 'Export deck error.'
 }
