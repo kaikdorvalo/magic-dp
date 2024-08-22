@@ -1,11 +1,17 @@
-import { Injectable } from "@nestjs/common";
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { GetCommanderUseCase } from "./get-commander.use-case";
 import { GetBasicLandsByCommanderUseCase } from "./get-basic-lands-by-commander.use-case";
 import { CreateDeckDto } from "src/shared/dtos/card/create-deck.dto";
 import { CardService } from "../../domain/services/card.service";
 import { InvalidLandsAmountException } from "src/shared/exceptions/card/invalid-lands-amount.exception";
-import { Card } from "../../domain/schemas/deck.schema";
+import { Card, Deck } from "../../domain/schemas/deck.schema";
 import { GetCardsByCommanderUseCase } from "./get-cards-by-commander.use-case";
+import { IUser } from "src/modules/user/application/interfaces/user.interface";
+import { Request } from "express";
+import { UserRepository } from "src/modules/user/domain/repositories/user.repository";
+import { Repositories } from "src/shared/constants/repositories.constants";
+import { CardRepositroy } from "../../infrastructure/persistence/card.repository.impl";
+import { ResponseData } from "src/shared/utils/response-data";
 
 @Injectable()
 export class GenerateDeckUseCase {
@@ -14,10 +20,15 @@ export class GenerateDeckUseCase {
 
         private readonly getCommanderUseCase: GetCommanderUseCase,
         private readonly getBasicLandsUseCase: GetBasicLandsByCommanderUseCase,
-        private readonly getCardsByCommanderUseCase: GetCardsByCommanderUseCase
+        private readonly getCardsByCommanderUseCase: GetCardsByCommanderUseCase,
+
+        private readonly cardRepository: CardRepositroy,
+
+        @Inject(Repositories.USER_REPOSITORY)
+        private readonly userRepository: UserRepository
     ) { }
 
-    async execute(createDeckDto: CreateDeckDto) {
+    async execute(createDeckDto: CreateDeckDto, request: Request) {
         const commander = await this.getCommanderUseCase.execute(createDeckDto.commanderName)
         const availableBasicLands = await this.getBasicLandsUseCase.execute(commander);
 
@@ -42,7 +53,15 @@ export class GenerateDeckUseCase {
         const deck: Card[] = this.buildDeck(commander, lands, searchedCards);
         console.log(deck.length);
 
-        return deck;
+        const requestUser = request["user"];
+        const user = await this.userRepository.getUserById(requestUser.sub);
+
+        const savedDeck = await this.persistDeck(commander, lands.length, deck, user._id);
+
+        return new ResponseData(
+            HttpStatus.CREATED,
+            savedDeck
+        )
     }
 
     private buildDeck(commander: Card, lands: Card[], cards: Card[]): Card[] {
@@ -59,5 +78,18 @@ export class GenerateDeckUseCase {
         }
 
         return deck
+    }
+
+    private async persistDeck(commander: Card, landsAmount: number, deck: Card[], userId: string): Promise<any> {
+        const newDeck = this.cardRepository.createDeck({
+            userId: userId,
+            commander: commander.name,
+            lands: landsAmount,
+            cards: deck
+        });
+
+        const savedDeck = await this.cardRepository.saveDeck(newDeck);
+
+        return savedDeck;
     }
 }

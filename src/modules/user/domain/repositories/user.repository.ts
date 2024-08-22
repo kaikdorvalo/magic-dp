@@ -7,7 +7,7 @@ export interface UserRepository {
 
     saveUser(user: User): Promise<IUser>
 
-    getUserById(id: number): Promise<IUser | null>
-
     getUserByEmail(email: string): Promise<IUser | null>
+
+    getUserById(_id: string): Promise<IUser | null>
 }

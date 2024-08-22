@@ -7,14 +7,21 @@ import { GetBasicLandsByCommanderUseCase } from "./application/use-case/get-basi
 import { GetCardsByCommanderUseCase } from "./application/use-case/get-cards-by-commander.use-case";
 import { GenerateDeckUseCase } from "./application/use-case/generate-deck.use-case";
 import { AuthModule } from "../auth/auth.module";
+import { UserModule } from "../user/user.module";
+import { MongooseModule } from "@nestjs/mongoose";
+import { Deck, DeckSchema } from "./domain/schemas/deck.schema";
+import { CardRepositroy } from "./infrastructure/persistence/card.repository.impl";
 
 @Module({
     imports: [
-        AuthModule
+        AuthModule,
+        UserModule,
+        MongooseModule.forFeature([{ name: Deck.name, schema: DeckSchema }])
     ],
     providers: [
         ScryfallApi,
         CardService,
+        CardRepositroy,
         GetCommanderUseCase,
         GetBasicLandsByCommanderUseCase,
         GetCardsByCommanderUseCase,

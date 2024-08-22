@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { IUser } from "src/modules/user/application/interfaces/user.interface";
 
 export type DeckDocument = Deck & Document;
 
@@ -238,6 +239,8 @@ export class Card {
 
 @Schema()
 export class Deck {
+    @Prop({ required: true })
+    userId: string
     @Prop({ required: true })
     commander: string
     @Prop({ required: true })

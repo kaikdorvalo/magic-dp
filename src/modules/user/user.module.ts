@@ -26,7 +26,8 @@ import { User, UserSchema } from "./domain/schemas/user.schema";
         {
             provide: Repositories.USER_REPOSITORY,
             useClass: UserRepositoryImpl
-        }
+        },
+        UserService
     ]
 })
 export class UserModule { }
