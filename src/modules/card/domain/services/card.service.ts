@@ -1,7 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { serialize } from "uri-js";
 import { Card } from "../schemas/deck.schema";
-import { InvalidLandsAmountException } from "src/shared/exceptions/card/invalid-lands-amount.exception";
 
 @Injectable()
 export class CardService {

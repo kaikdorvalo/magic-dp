@@ -4,9 +4,9 @@ import { GetDeckByIdUseCase } from "./get-deck-by-id.use-case";
 import "dotenv/config"
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { ExportDeckErrorException } from "src/shared/exceptions/card/export-deck-error.exception";
-import { ResponseData } from "src/shared/utils/response-data";
-import { httpExceptionHandler } from "src/shared/utils/exception-handler";
+import { ExportDeckErrorException } from "../../../../shared/exceptions/card/export-deck-error.exception";
+import { ResponseData } from "../../../../shared/utils/response-data";
+import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";
 
 @Injectable()
 export class ExportDeckToJsonUseCase {

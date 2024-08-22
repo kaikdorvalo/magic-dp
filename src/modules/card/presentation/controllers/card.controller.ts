@@ -1,14 +1,11 @@
 import { Body, Controller, Get, Param, Post, Req, Res, UseFilters, UseGuards } from "@nestjs/common";
-import { CreateDeckDto } from "src/shared/dtos/card/create-deck.dto";
-import { GetCommanderUseCase } from "../../application/use-case/get-commander.use-case";
-import { HttpExceptionFilter } from "src/shared/exceptions-filter/http-exception.exception-filter";
+import { CreateDeckDto } from "../../../../shared/dtos/card/create-deck.dto";
+import { HttpExceptionFilter } from "../../../../shared/exceptions-filter/http-exception.exception-filter";
 import { GenerateDeckUseCase } from "../../application/use-case/generate-deck.use-case";
-import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { CreateUserDto } from "src/shared/dtos/user/create-user.dto";
-import { AuthGuard } from "src/modules/auth/application/guards/auth.guard";
-import { Request, request, Response } from "express";
+import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { AuthGuard } from "../../../../modules/auth/application/guards/auth.guard";
+import { Request, Response } from "express";
 import { GetDeckByIdUseCase } from "../../application/use-case/get-deck-by-id.use-case";
-import { ResponseData } from "src/shared/utils/response-data";
 import { ExportDeckToJsonUseCase } from "../../application/use-case/export-deck-to-json.use-case";
 
 @Controller('cards')
@@ -28,7 +25,7 @@ export class CardController {
         type: CreateDeckDto
     })
     async createDeck(@Body() createDeckDto: CreateDeckDto, @Req() request: Request, @Res() response: Response) {
-        const result = await this.generateDeckUseCase.execute(createDeckDto, request);
+        const result = await this.generateDeckUseCase.execute(createDeckDto, request["user"].sub);
         return response.send(result)
     }
 

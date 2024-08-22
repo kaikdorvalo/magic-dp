@@ -1,7 +1,7 @@
 import { Body, Controller, HttpStatus, Post, Res, UseFilters } from "@nestjs/common";
-import { HttpExceptionFilter } from "src/shared/exceptions-filter/http-exception.exception-filter";
+import { HttpExceptionFilter } from "../../../../shared/exceptions-filter/http-exception.exception-filter";
 import { CreateUserUseCase } from "../../application/use-case/create-user.use-case";
-import { CreateUserDto } from "src/shared/dtos/user/create-user.dto";
+import { CreateUserDto } from "../../../../shared/dtos/user/create-user.dto";
 import { Response } from "express";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ScryfallApi } from "../api/scryfall-api";
 import { Card } from "../../domain/schemas/deck.schema";
-import { httpExceptionHandler } from "src/shared/utils/exception-handler";
+import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";
 
 
 @Injectable()

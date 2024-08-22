@@ -1,12 +1,11 @@
 import { HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { CreateUserDto } from "src/shared/dtos/user/create-user.dto";
+import { CreateUserDto } from "../../../../shared/dtos/user/create-user.dto";
 import { UserRepository } from "../../domain/repositories/user.repository";
-import { Repositories } from "src/shared/constants/repositories.constants";
+import { Repositories } from "../../../../shared/constants/repositories.constants";
 import { UserService } from "../../domain/services/user.service";
-import { ResponseData } from "src/shared/utils/response-data";
-import { UserAlreadyExistsException } from "src/shared/exceptions/user/user-already-exists.exception";
-import { httpExceptionHandler } from "src/shared/utils/exception-handler";
-import { User } from "../../domain/schemas/user.schema";
+import { ResponseData } from "../../../../shared/utils/response-data";
+import { UserAlreadyExistsException } from "../../../../shared/exceptions/user/user-already-exists.exception";
+import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";
 
 @Injectable()
 export class CreateUserUseCase {

@@ -1,4 +1,3 @@
-import { DeepPartial, Repository } from "typeorm";
 import { User, UserDocument } from "../schemas/user.schema";
 import { IUser } from "../../application/interfaces/user.interface";
 

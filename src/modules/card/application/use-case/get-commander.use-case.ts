@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { ScryfallApi } from "../api/scryfall-api";
-import { CommanderNotFoundException } from "src/shared/exceptions/card/commander-bot-found.exception";
-import { NotCommanderException } from "src/shared/exceptions/card/not-commander.exception";
+import { CommanderNotFoundException } from "../../../../shared/exceptions/card/commander-bot-found.exception";
+import { NotCommanderException } from "../../../../shared/exceptions/card/not-commander.exception";
 import { Card } from "../../domain/schemas/deck.schema";
-import { httpExceptionHandler } from "src/shared/utils/exception-handler";
+import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";
 
 @Injectable()
 export class GetCommanderUseCase {

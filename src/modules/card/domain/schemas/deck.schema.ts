@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { IUser } from "src/modules/user/application/interfaces/user.interface";
 
 export type DeckDocument = Deck & Document;
 
