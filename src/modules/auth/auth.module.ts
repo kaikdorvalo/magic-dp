@@ -6,6 +6,8 @@ import { UserModule } from "../user/user.module";
 import { JwtModule } from "@nestjs/jwt";
 import "dotenv/config"
 import { UserSignInUseCase } from "./application/use-case/user-signin.use-case";
+import { AuthGuard } from "./application/guards/auth.guard";
+import { Guards } from "src/shared/constants/guards.constants";
 
 @Module({
     imports: [
@@ -18,10 +20,13 @@ import { UserSignInUseCase } from "./application/use-case/user-signin.use-case";
     ],
     providers: [
         AuthService,
-        UserSignInUseCase
+        UserSignInUseCase,
     ],
     controllers: [
         AuthController,
     ],
+    exports: [
+        AuthService
+    ]
 })
 export class AuthModule { }

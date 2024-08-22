@@ -1,12 +1,13 @@
 import { DeepPartial, Repository } from "typeorm";
 import { User, UserDocument } from "../schemas/user.schema";
+import { IUser } from "../../application/interfaces/user.interface";
 
 export interface UserRepository {
     createUser(user: Partial<User>): UserDocument
 
-    saveUser(user: User): Promise<User>
+    saveUser(user: User): Promise<IUser>
 
-    getUserById(id: number): Promise<User | null>
+    getUserById(id: number): Promise<IUser | null>
 
-    getUserByEmail(email: string): Promise<User | null>
+    getUserByEmail(email: string): Promise<IUser | null>
 }

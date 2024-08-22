@@ -21,6 +21,12 @@ import { User, UserSchema } from "./domain/schemas/user.schema";
     ],
     controllers: [
         UserController
+    ],
+    exports: [
+        {
+            provide: Repositories.USER_REPOSITORY,
+            useClass: UserRepositoryImpl
+        }
     ]
 })
 export class UserModule { }

@@ -1,14 +1,14 @@
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { HttpStatus, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { UserRepository } from "src/modules/user/domain/repositories/user.repository";
 import { UserService } from "src/modules/user/domain/services/user.service";
 import { Repositories } from "src/shared/constants/repositories.constants";
 import { UserSignInDto } from "src/shared/dtos/user/user-signin.dto";
 import { AuthService } from "../../domain/service/auth.service";
+import { ResponseData } from "src/shared/utils/response-data";
 
 @Injectable()
 export class UserSignInUseCase {
     constructor(
-        private readonly userService: UserService,
         private readonly authService: AuthService,
 
         @Inject(Repositories.USER_REPOSITORY)
@@ -26,9 +26,12 @@ export class UserSignInUseCase {
             throw new UnauthorizedException();
         }
 
-        return {
-            access_token: this.authService.generateJwtToken(user._id)
-        }
+        return new ResponseData(
+            HttpStatus.OK,
+            {
+                access_token: await this.authService.generateJwtToken(user._id)
+            }
+        )
 
 
     }
