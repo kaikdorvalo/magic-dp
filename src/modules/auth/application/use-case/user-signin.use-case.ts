@@ -5,6 +5,7 @@ import { Repositories } from "src/shared/constants/repositories.constants";
 import { UserSignInDto } from "src/shared/dtos/user/user-signin.dto";
 import { AuthService } from "../../domain/service/auth.service";
 import { ResponseData } from "src/shared/utils/response-data";
+import { httpExceptionHandler } from "src/shared/utils/exception-handler";
 
 @Injectable()
 export class UserSignInUseCase {
@@ -16,23 +17,25 @@ export class UserSignInUseCase {
     ) { }
 
     async execute(userSignIn: UserSignInDto) {
-        const user = await this.userRepository.getUserByEmail(userSignIn.email);
+        try {
+            const user = await this.userRepository.getUserByEmail(userSignIn.email);
 
-        if (user == null) {
-            throw new UnauthorizedException();
-        }
-
-        if (!(await this.authService.comparePassword(userSignIn.password, user.password))) {
-            throw new UnauthorizedException();
-        }
-
-        return new ResponseData(
-            HttpStatus.OK,
-            {
-                access_token: await this.authService.generateJwtToken(user._id)
+            if (user == null) {
+                throw new UnauthorizedException();
             }
-        )
 
+            if (!(await this.authService.comparePassword(userSignIn.password, user.password))) {
+                throw new UnauthorizedException();
+            }
 
+            return new ResponseData(
+                HttpStatus.OK,
+                {
+                    access_token: await this.authService.generateJwtToken(user._id)
+                }
+            )
+        } catch (err: any) {
+            httpExceptionHandler(err);
+        }
     }
 }
