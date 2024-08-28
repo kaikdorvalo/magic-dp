@@ -5,15 +5,18 @@ import { CreateUserUseCase } from "./application/use-case/create-user.use-case";
 import { UserService } from "./domain/services/user.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { User, UserSchema } from "./domain/schemas/user.schema";
+import { AuthModule } from "../auth/auth.module";
+import { GetUserUseCase } from "./application/use-case/get-user.use-case";
 
 @Module({
     imports: [
-        MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])
+        MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ],
     providers: [
         UserService,
         CreateUserUseCase,
-        UserRepository
+        UserRepository,
+        GetUserUseCase,
     ],
     controllers: [
         UserController
