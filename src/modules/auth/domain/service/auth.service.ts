@@ -20,19 +20,4 @@ export class AuthService {
 
         return await this.jwtService.signAsync(payload);
     }
-
-    async decodeToken(token: string) {
-        try {
-            const decode = await this.jwtService.verifyAsync(
-                token,
-                {
-                    secret: process.env.JWT_TOKEN
-                }
-            )
-
-            return decode;
-        } catch (err) {
-            throw new UnauthorizedException()
-        }
-    }
 }
