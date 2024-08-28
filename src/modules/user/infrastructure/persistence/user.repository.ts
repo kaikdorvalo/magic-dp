@@ -1,10 +1,9 @@
 import { User, UserDocument } from "../../domain/schemas/user.schema";
-import { UserRepository } from "../../domain/repositories/user.repository";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { IUser } from "../../application/interfaces/user.interface";
 
-export class UserRepositoryImpl implements UserRepository {
+export class UserRepository {
     constructor(
         @InjectModel(User.name) private readonly userModel: Model<User>
     ) { }

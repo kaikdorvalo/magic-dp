@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { UserController } from "./presentation/controllers/user.controller";
-import { Repositories } from "../../shared/constants/repositories.constants";
-import { UserRepositoryImpl } from "./infrastructure/persistence/user.repository.impl";
+import { UserRepository } from "./infrastructure/persistence/user.repository";
 import { CreateUserUseCase } from "./application/use-case/create-user.use-case";
 import { UserService } from "./domain/services/user.service";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -14,19 +13,13 @@ import { User, UserSchema } from "./domain/schemas/user.schema";
     providers: [
         UserService,
         CreateUserUseCase,
-        {
-            provide: Repositories.USER_REPOSITORY,
-            useClass: UserRepositoryImpl
-        }
+        UserRepository
     ],
     controllers: [
         UserController
     ],
     exports: [
-        {
-            provide: Repositories.USER_REPOSITORY,
-            useClass: UserRepositoryImpl
-        },
+        UserRepository,
         UserService
     ]
 })

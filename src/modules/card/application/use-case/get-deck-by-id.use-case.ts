@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { CardRepositroy } from "../../infrastructure/persistence/card.repository.impl";
+import { CardRepositroy } from "../../infrastructure/persistence/card.repository";
 import { DeckNotFoundException } from "../../../../shared/exceptions/card/deck-not-found.exception";
 import { ResponseData } from "../../../../shared/utils/response-data";
 import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";

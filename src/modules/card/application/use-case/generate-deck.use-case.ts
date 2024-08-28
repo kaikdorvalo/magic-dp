@@ -6,11 +6,11 @@ import { CardService } from "../../domain/services/card.service";
 import { InvalidLandsAmountException } from "../../../../shared/exceptions/card/invalid-lands-amount.exception";
 import { Card } from "../../domain/schemas/deck.schema";
 import { GetCardsByCommanderUseCase } from "./get-cards-by-commander.use-case";
-import { UserRepository } from "../../../../modules/user/domain/repositories/user.repository";
 import { Repositories } from "../../../../shared/constants/repositories.constants";
-import { CardRepositroy } from "../../infrastructure/persistence/card.repository.impl";
+import { CardRepositroy } from "../../infrastructure/persistence/card.repository";
 import { ResponseData } from "../../../../shared/utils/response-data";
 import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";
+import { UserRepository } from "src/modules/user/infrastructure/persistence/user.repository";
 
 @Injectable()
 export class GenerateDeckUseCase {
@@ -23,7 +23,6 @@ export class GenerateDeckUseCase {
 
         private readonly cardRepository: CardRepositroy,
 
-        @Inject(Repositories.USER_REPOSITORY)
         private readonly userRepository: UserRepository
     ) { }
 

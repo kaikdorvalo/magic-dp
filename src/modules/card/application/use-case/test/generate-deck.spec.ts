@@ -6,10 +6,10 @@ import { GetCardsByCommanderUseCase } from "../../../../../modules/card/applicat
 import { GetCommanderUseCase } from "../../../../../modules/card/application/use-case/get-commander.use-case"
 import { Card, Deck } from "../../../../../modules/card/domain/schemas/deck.schema"
 import { CardService } from "../../../../../modules/card/domain/services/card.service"
-import { CardRepositroy } from "../../../../../modules/card/infrastructure/persistence/card.repository.impl"
+import { CardRepositroy } from "../../../infrastructure/persistence/card.repository"
 import { IUser } from "../../../../../modules/user/application/interfaces/user.interface"
 import { User } from "../../../../../modules/user/domain/schemas/user.schema"
-import { UserRepositoryImpl } from "../../../../../modules/user/infrastructure/persistence/user.repository.impl"
+import { UserRepositoryImpl } from "../../../../user/infrastructure/persistence/user.repository"
 import { CreateDeckDto } from "../../../../../shared/dtos/card/create-deck.dto"
 
 describe('Generate deck test', () => {
