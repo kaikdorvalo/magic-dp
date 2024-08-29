@@ -30,7 +30,7 @@ export class UserController {
 
     @Get()
     @UseGuards(AuthGuard)
-    async getUser(@Param('id') id: string, @Res() response: Response, @Req() request: Request) {
+    async getUser(@Res() response: Response, @Req() request: Request) {
         const result = await this.getUserUseCase.execute(request["user"].sub);
         return response.status(result.status).send(result.data);
     }
