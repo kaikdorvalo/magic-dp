@@ -28,7 +28,7 @@ export class UserController {
         return res.status(result.status).send(result.data);
     }
 
-    @Get()
+    @Get('get')
     @UseGuards(AuthGuard)
     async getUser(@Res() response: Response, @Req() request: Request) {
         const result = await this.getUserUseCase.execute(request["user"].sub);
