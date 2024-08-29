@@ -7,9 +7,7 @@ import { IUser } from "../interfaces/user.interface";
 export class GetUserUseCase {
     constructor(
         private readonly userRepository: UserRepository
-    ) {
-        console.log(userRepository)
-    }
+    ) { }
 
     async execute(id: string) {
         const user: IUser = await this.userRepository.getUserById(id);
