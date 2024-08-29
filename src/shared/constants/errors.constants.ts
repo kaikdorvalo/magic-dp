@@ -6,5 +6,7 @@ export const Errors = {
     INVALID_LANDS_AMOUNT: 'Invalid lands amount.',
     UNAUTHORIZED: "Unauthorized",
     DECK_NOT_FOUND: 'Deck not found.',
-    EXPORT_DECK_ERROR: 'Export deck error.'
+    EXPORT_DECK_ERROR: 'Export deck error.',
+    USER_NOT_FOUND: 'User not found.',
+    EMAIL_ALREADY_EXISTS: 'Email already exists.'
 }

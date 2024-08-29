@@ -1,8 +1,10 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { User } from "../../domain/schemas/user.schema";
 import { UserRepository } from "../../infrastructure/persistence/user.repository";
 import { UpdateUserDto } from "src/shared/dtos/user/update-user.dto";
 import { ResponseData } from "src/shared/utils/response-data";
+import { UserNotFoundException } from "src/shared/exceptions/user/user-not-found.exception";
+import { httpExceptionHandler } from "src/shared/utils/exception-handler";
+import { EmailAlreadyExists } from "src/shared/exceptions/user/email-already-exists.exception";
 
 @Injectable()
 export class UpdateUserUseCase {
@@ -12,25 +14,29 @@ export class UpdateUserUseCase {
     ) { }
 
     async execute(user: UpdateUserDto, requestedUser: string) {
-        const exists = await this.userRepository.getUserById(requestedUser)
+        try {
+            const exists = await this.userRepository.getUserById(requestedUser)
 
-        if (!exists) {
-            // exception
-        }
-
-        if (user.email !== exists.email) {
-            const newEmailExists = await this.userRepository.getUserByEmail(user.email);
-
-            if (newEmailExists) {
-                // exception email em uso
+            if (!exists) {
+                throw new UserNotFoundException();
             }
+
+            if (user.email !== exists.email) {
+                const newEmailExists = await this.userRepository.getUserByEmail(user.email);
+
+                if (newEmailExists) {
+                    throw new EmailAlreadyExists();
+                }
+            }
+
+            const updated = await this.userRepository.updateUser(requestedUser, user);
+
+            return new ResponseData(
+                HttpStatus.OK,
+                updated
+            )
+        } catch (err: any) {
+            httpExceptionHandler(err);
         }
-
-        const updated = await this.userRepository.updateUser(requestedUser, user);
-
-        return new ResponseData(
-            HttpStatus.OK,
-            updated
-        )
     }
 }

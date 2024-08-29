@@ -6,6 +6,8 @@ import { Request, Response } from "express";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { GetUserUseCase } from "../../application/use-case/get-user.use-case";
 import { AuthGuard } from "src/modules/auth/application/guards/auth.guard";
+import { UpdateUserDto } from "src/shared/dtos/user/update-user.dto";
+import { UpdateUserUseCase } from "../../application/use-case/update-user.use-case";
 
 
 @Controller('users')
@@ -14,7 +16,8 @@ import { AuthGuard } from "src/modules/auth/application/guards/auth.guard";
 export class UserController {
     constructor(
         private readonly createUserUseCase: CreateUserUseCase,
-        private readonly getUserUseCase: GetUserUseCase
+        private readonly getUserUseCase: GetUserUseCase,
+        private readonly updateUserUseCase: UpdateUserUseCase
     ) { }
 
     @Post('create')
@@ -32,6 +35,13 @@ export class UserController {
     @UseGuards(AuthGuard)
     async getUser(@Res() response: Response, @Req() request: Request) {
         const result = await this.getUserUseCase.execute(request["user"].sub);
+        return response.status(result.status).send(result.data);
+    }
+
+    @Post('update')
+    @UseGuards(AuthGuard)
+    async updateUser(@Body() updateUser: UpdateUserDto, @Res() response: Response, @Req() request: Request) {
+        const result = await this.updateUserUseCase.execute(updateUser, request["user"].sub);
         return response.status(result.status).send(result.data);
     }
 }

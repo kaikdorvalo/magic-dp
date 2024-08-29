@@ -26,6 +26,7 @@ export class CreateUserUseCase {
             const newUser = this.userRepository.createUser(createUserDto);
             newUser.password = await this.userService.hashPassword(newUser.password);
             const save = await this.userRepository.saveUser(newUser)
+            console.log(save)
 
             return new ResponseData(
                 HttpStatus.CREATED,

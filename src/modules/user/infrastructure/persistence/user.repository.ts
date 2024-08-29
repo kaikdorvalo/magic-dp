@@ -16,6 +16,7 @@ export class UserRepository {
 
     async saveUser(user: User): Promise<User> {
         const newUser = new this.userModel(user);
+        await newUser.save();
         newUser.password = undefined;
         return newUser;
     }
