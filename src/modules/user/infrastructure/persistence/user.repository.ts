@@ -1,6 +1,6 @@
 import { User, UserDocument } from "../../domain/schemas/user.schema";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, UpdateWriteOpResult } from "mongoose";
 import { IUser } from "../../application/interfaces/user.interface";
 import { Injectable } from "@nestjs/common";
 
@@ -27,5 +27,9 @@ export class UserRepository {
 
     async getUserByEmail(email: string): Promise<User | null> {
         return await this.userModel.findOne({ email: email });
+    }
+
+    async updateUser(_id: string, user: Partial<User>): Promise<UpdateWriteOpResult> {
+        return await this.userModel.updateOne({ _id: _id }, user);
     }
 }
