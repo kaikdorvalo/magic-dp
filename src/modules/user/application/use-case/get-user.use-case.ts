@@ -10,7 +10,7 @@ export class GetUserUseCase {
     ) { }
 
     async execute(id: string) {
-        const user: IUser = await this.userRepository.getUserById(id);
+        const user = await this.userRepository.getUserById(id);
         user.password = undefined;
         return new ResponseData(
             HttpStatus.FOUND,

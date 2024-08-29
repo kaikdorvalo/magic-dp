@@ -14,20 +14,18 @@ export class UserRepository {
         return new this.userModel(user);
     }
 
-    async saveUser(user: User): Promise<IUser> {
+    async saveUser(user: User): Promise<User> {
         const newUser = new this.userModel(user);
-        const savedUser = await newUser.save();
-        const object: IUser = savedUser.toObject();
-        delete object.password;
-        return object;
+        newUser.password = undefined;
+        return newUser;
     }
 
-    async getUserById(_id: string): Promise<IUser | null> {
-        const user: IUser = await this.userModel.findById(_id);
+    async getUserById(_id: string): Promise<User | null> {
+        const user: User = await this.userModel.findById(_id);
         return user;
     }
 
-    async getUserByEmail(email: string): Promise<IUser | null> {
+    async getUserByEmail(email: string): Promise<User | null> {
         return await this.userModel.findOne({ email: email });
     }
 }
