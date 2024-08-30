@@ -27,7 +27,7 @@ export class UserSignInUseCase {
             return new ResponseData(
                 HttpStatus.OK,
                 {
-                    access_token: await this.authService.generateJwtToken(user._id)
+                    access_token: await this.authService.generateJwtToken(user._id, user.roles)
                 }
             )
         } catch (err: any) {

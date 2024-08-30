@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from "src/modules/user/domain/schemas/user.schema";
 import "dotenv/config"
 import { UnauthorizedException } from "src/shared/exceptions/auth/unauthorized.exception";
+import { Role } from "src/shared/enums/roles.enum";
 
 @Injectable()
 export class AuthService {
@@ -15,8 +16,10 @@ export class AuthService {
         return await bcrypt.compare(receivedPassword, password)
     }
 
-    async generateJwtToken(userId: string) {
-        const payload = { sub: userId }
+    async generateJwtToken(userId: string, roles: Role[]) {
+        const payload = { sub: userId, roles: roles }
+
+        console.log(payload)
 
         return await this.jwtService.signAsync(payload);
     }
