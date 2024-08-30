@@ -8,6 +8,8 @@ import { GetUserUseCase } from "../../application/use-case/get-user.use-case";
 import { AuthGuard } from "src/modules/auth/application/guards/auth.guard";
 import { UpdateUserDto } from "src/shared/dtos/user/update-user.dto";
 import { UpdateUserUseCase } from "../../application/use-case/update-user.use-case";
+import { Roles } from "../../application/decorators/roles.decorator";
+import { Role } from "src/shared/enums/roles.enum";
 
 
 @Controller('users')
@@ -39,6 +41,7 @@ export class UserController {
     }
 
     @Post('update')
+    @Roles(Role.ADMIN)
     @UseGuards(AuthGuard)
     async updateUser(@Body() updateUser: UpdateUserDto, @Res() response: Response, @Req() request: Request) {
         const result = await this.updateUserUseCase.execute(updateUser, request["user"].sub);
