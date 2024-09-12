@@ -30,6 +30,7 @@ export class UserController {
     @ApiResponse({ status: HttpStatus.OK, description: 'User created' })
     @ApiResponse({ status: HttpStatus.CONFLICT, description: 'User already exists' })
     async createUser(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+        console.log(createUserDto)
         const result = await this.createUserUseCase.execute(createUserDto);
         return res.status(result.status).send(result.data);
     }
