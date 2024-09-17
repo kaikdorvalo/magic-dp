@@ -13,6 +13,7 @@ import { Deck, DeckSchema } from "./domain/schemas/deck.schema";
 import { CardRepositroy } from "./infrastructure/persistence/card.repository";
 import { GetDeckByIdUseCase } from "./application/use-case/get-deck-by-id.use-case";
 import { ExportDeckToJsonUseCase } from "./application/use-case/export-deck-to-json.use-case";
+import { GetAllUserDecksUseCase } from "./application/use-case/get-all-user-decks.use-case";
 
 @Module({
     imports: [
@@ -29,7 +30,8 @@ import { ExportDeckToJsonUseCase } from "./application/use-case/export-deck-to-j
         GetCardsByCommanderUseCase,
         GenerateDeckUseCase,
         GetDeckByIdUseCase,
-        ExportDeckToJsonUseCase
+        ExportDeckToJsonUseCase,
+        GetAllUserDecksUseCase
     ],
     controllers: [
         CardController
