@@ -3,9 +3,14 @@ import { AppModule } from './app.module';
 import "reflect-metadata";
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(json({ limit: '50mb' }));  // Ajuste o limite de tamanho do JSON conforme necessário
+  app.use(urlencoded({ limit: '50mb', extended: true }));  // Ajuste o limite do URL-encoded
+
 
   const config = new DocumentBuilder()
     .setTitle('Magic DP')
