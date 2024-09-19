@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, Res, UseFilters, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, Req, Res, UseFilters, UseGuards } from "@nestjs/common";
 import { CreateDeckDto } from "../../../../shared/dtos/card/create-deck.dto";
 import { HttpExceptionFilter } from "../../../../shared/exceptions-filter/http-exception.exception-filter";
 import { GenerateDeckUseCase } from "../../application/use-case/generate-deck.use-case";
@@ -9,6 +9,8 @@ import { GetDeckByIdUseCase } from "../../application/use-case/get-deck-by-id.us
 import { ExportDeckToJsonUseCase } from "../../application/use-case/export-deck-to-json.use-case";
 import { request } from "http";
 import { GetAllUserDecksUseCase } from "../../application/use-case/get-all-user-decks.use-case";
+import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Deck } from "../../domain/schemas/deck.schema";
 
 @Controller('cards')
 @UseFilters(new HttpExceptionFilter())
@@ -20,7 +22,9 @@ export class CardController {
         private generateDeckUseCase: GenerateDeckUseCase,
         private getDeckByIdUseCase: GetDeckByIdUseCase,
         private exportDeckToJsonUseCase: ExportDeckToJsonUseCase,
-        private getAllUserDecksUseCase: GetAllUserDecksUseCase
+        private getAllUserDecksUseCase: GetAllUserDecksUseCase,
+
+        @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) { }
 
     @Post('commander')
@@ -46,8 +50,18 @@ export class CardController {
 
     @Get('decks/get/all')
     async getAllUserDecks(@Req() request: Request, @Res() response) {
-        console.log(request["user"].sub)
+        const cache: Deck[] = await this.cacheManager.get('user_cards')
+        if (cache) {
+            console.log(cache)
+            if (cache[0].userId == request["user"].sub) {
+                return response.status(200).send(cache);
+            }
+        }
+
         const result = await this.getAllUserDecksUseCase.execute(request["user"].sub);
+        if (!cache) {
+            await this.cacheManager.set('user_cards', result.data, 30000)
+        }
         return response.status(result.status).send(result.data);
     }
 

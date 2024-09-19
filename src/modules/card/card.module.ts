@@ -14,12 +14,14 @@ import { CardRepositroy } from "./infrastructure/persistence/card.repository";
 import { GetDeckByIdUseCase } from "./application/use-case/get-deck-by-id.use-case";
 import { ExportDeckToJsonUseCase } from "./application/use-case/export-deck-to-json.use-case";
 import { GetAllUserDecksUseCase } from "./application/use-case/get-all-user-decks.use-case";
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
     imports: [
         AuthModule,
         UserModule,
-        MongooseModule.forFeature([{ name: Deck.name, schema: DeckSchema }])
+        MongooseModule.forFeature([{ name: Deck.name, schema: DeckSchema }]),
+        CacheModule.register()
     ],
     providers: [
         ScryfallApi,
