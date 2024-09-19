@@ -11,7 +11,7 @@ import { ValidadeDeckUseCase } from "../../application/use-case/validate-deck-us
 
 @Controller('cards')
 @UseFilters(new HttpExceptionFilter())
-//@UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 @ApiTags('Cards')
 export class CardController {
 
