@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post, Req, Res, UseFilters, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, Inject, Param, Post, Req, Res, UseFilters, UseGuards } from "@nestjs/common";
 import { CreateDeckDto } from "../../../../shared/dtos/card/create-deck.dto";
 import { HttpExceptionFilter } from "../../../../shared/exceptions-filter/http-exception.exception-filter";
 import { GenerateDeckUseCase } from "../../application/use-case/generate-deck.use-case";
@@ -7,6 +7,7 @@ import { AuthGuard } from "../../../../modules/auth/application/guards/auth.guar
 import { Request, response, Response } from "express";
 import { GetDeckByIdUseCase } from "../../application/use-case/get-deck-by-id.use-case";
 import { ExportDeckToJsonUseCase } from "../../application/use-case/export-deck-to-json.use-case";
+import { ValidadeDeckUseCase } from "../../application/use-case/validate-deck-use-case";
 import { request } from "http";
 import { GetAllUserDecksUseCase } from "../../application/use-case/get-all-user-decks.use-case";
 import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
@@ -22,6 +23,7 @@ export class CardController {
         private generateDeckUseCase: GenerateDeckUseCase,
         private getDeckByIdUseCase: GetDeckByIdUseCase,
         private exportDeckToJsonUseCase: ExportDeckToJsonUseCase,
+        private validadeDeckUseCase: ValidadeDeckUseCase,
         private getAllUserDecksUseCase: GetAllUserDecksUseCase,
 
         @Inject(CACHE_MANAGER) private cacheManager: Cache
@@ -46,6 +48,11 @@ export class CardController {
     async exportDeckToJson(@Param('id') id: string, @Req() request: Request, @Res() response: Response) {
         const result = await this.exportDeckToJsonUseCase.execute(id, request["user"].sub);
         return response.status(result.status).send(result.data)
+    }
+
+    @Post('validate')
+    importDeck(@Body() deckJson: any) {
+        return this.validadeDeckUseCase.execute(deckJson);
     }
 
     @Get('decks/get/all')

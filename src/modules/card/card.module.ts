@@ -13,6 +13,7 @@ import { Deck, DeckSchema } from "./domain/schemas/deck.schema";
 import { CardRepositroy } from "./infrastructure/persistence/card.repository";
 import { GetDeckByIdUseCase } from "./application/use-case/get-deck-by-id.use-case";
 import { ExportDeckToJsonUseCase } from "./application/use-case/export-deck-to-json.use-case";
+import { ValidadeDeckUseCase } from "./application/use-case/validate-deck-use-case";
 import { GetAllUserDecksUseCase } from "./application/use-case/get-all-user-decks.use-case";
 import { CacheModule } from '@nestjs/cache-manager';
 
@@ -33,6 +34,7 @@ import { CacheModule } from '@nestjs/cache-manager';
         GenerateDeckUseCase,
         GetDeckByIdUseCase,
         ExportDeckToJsonUseCase,
+        ValidadeDeckUseCase,
         GetAllUserDecksUseCase
     ],
     controllers: [
