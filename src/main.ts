@@ -4,7 +4,6 @@ import "reflect-metadata";
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
-const cors = require('cors');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
