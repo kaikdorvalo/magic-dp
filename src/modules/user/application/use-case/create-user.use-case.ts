@@ -6,6 +6,7 @@ import { ResponseData } from "../../../../shared/utils/response-data";
 import { UserAlreadyExistsException } from "../../../../shared/exceptions/user/user-already-exists.exception";
 import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";
 import { UserRepository } from "../../infrastructure/persistence/user.repository";
+import { Role } from "src/shared/enums/roles.enum";
 
 @Injectable()
 export class CreateUserUseCase {
@@ -25,6 +26,9 @@ export class CreateUserUseCase {
 
             const newUser = this.userRepository.createUser(createUserDto);
             newUser.password = await this.userService.hashPassword(newUser.password);
+            newUser.roles = [Role.USER];
+
+            console.log(newUser)
             const save = await this.userRepository.saveUser(newUser)
             console.log(save)
 

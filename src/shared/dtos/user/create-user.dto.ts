@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ArrayMinSize, IsArray, IsEmail, IsNotEmpty, IsString, IsStrongPassword, Min, MinLength } from "class-validator"
+import { ArrayMinSize, IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword, Min, MinLength } from "class-validator"
 import { Role } from "src/shared/enums/roles.enum";
 
 export class CreateUserDto {
@@ -31,6 +31,7 @@ export class CreateUserDto {
     @IsNotEmpty()
     @IsArray()
     @ArrayMinSize(1)
+    @IsOptional()
     @ApiProperty({
         description: 'User roles'
     })
