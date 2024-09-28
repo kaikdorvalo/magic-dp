@@ -26,8 +26,9 @@ export class CreateUserUseCase {
 
             const newUser = this.userRepository.createUser(createUserDto);
             newUser.password = await this.userService.hashPassword(newUser.password);
-            newUser.roles = [Role.USER];
-
+            if (newUser.roles.length == 0) {
+                newUser.roles = [Role.USER];
+            }
             const save = await this.userRepository.saveUser(newUser)
 
             return new ResponseData(

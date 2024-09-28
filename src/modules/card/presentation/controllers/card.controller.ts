@@ -59,13 +59,14 @@ export class CardController {
     async getAllUserDecks(@Req() request: Request, @Res() response) {
         const cache: Deck[] = await this.cacheManager.get('user_cards')
         if (cache) {
+            console.log(cache)
             if (cache[0].userId == request["user"].sub) {
                 return response.status(200).send(cache);
             }
         }
 
         const result = await this.getAllUserDecksUseCase.execute(request["user"].sub);
-        if (!cache) {
+        if (!cache && result.data.length > 0) {
             await this.cacheManager.set('user_cards', result.data, 30000)
         }
         return response.status(result.status).send(result.data);
