@@ -61,7 +61,6 @@ describe('Generate deck test', () => {
 
         const correctLandsForCommander = !map.includes(false)
 
-        console.log(correctLandsForCommander)
 
         expect(correctLandsForCommander).toBe(true)
         expect(commander).toBeDefined()

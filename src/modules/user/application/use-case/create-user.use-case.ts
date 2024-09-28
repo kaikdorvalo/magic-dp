@@ -28,9 +28,7 @@ export class CreateUserUseCase {
             newUser.password = await this.userService.hashPassword(newUser.password);
             newUser.roles = [Role.USER];
 
-            console.log(newUser)
             const save = await this.userRepository.saveUser(newUser)
-            console.log(save)
 
             return new ResponseData(
                 HttpStatus.CREATED,

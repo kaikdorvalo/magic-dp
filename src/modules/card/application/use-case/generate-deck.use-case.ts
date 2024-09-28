@@ -44,13 +44,11 @@ export class GenerateDeckUseCase {
 
                 for (let card of searchedCards) {
                     if (card.type_line.includes('Legendary Creature')) {
-                        console.log('lendaria')
                     }
                 }
             }
 
             const deck: Card[] = this.buildDeck(commander, lands, searchedCards);
-            console.log(deck.length);
 
             const user = await this.userRepository.getUserById(userId);
 

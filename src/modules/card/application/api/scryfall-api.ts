@@ -20,8 +20,7 @@ export class ScryfallApi {
             if (res.status !== 200) {
                 return null
             }
-            console.log('status')
-            console.log(res.status)
+
             const commander = res.data;
             return commander;
         } catch (err: any) {
@@ -48,7 +47,6 @@ export class ScryfallApi {
                 return filtered;
             }, []);
 
-            console.log(basicLands.length)
             return basicLands;
         } catch (error) {
             console.error('Erro ao buscar terrenos básicos:', error.message);
