@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "cluster": "ts-node -r tsconfig-paths/register cluster.ts",
-    "cannon": "npx autocannon -c 500 -d 20 -w 10 --renderStatusCodes --latency --warmup [ -c 1 -d 2 ] localhost:3000/comics/getnames > ./carga/carga.txt"
+    "cannon": "npx autocannon -c 100 -d 10 --renderStatusCodes --latency --warmup [ -c 1 -d 2 ] localhost:3000/cards/decks/get/all"
   },
   "dependencies": {
     "@faker-js/faker": "^9.0.0",
