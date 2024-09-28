@@ -12,7 +12,6 @@ for (let i = 0; i < 50; i++) {
 
     const body = JSON.stringify(data)
 
-    console.log(body)
 
     fetch('http://localhost:3000/users/create', {
         method: 'POST',

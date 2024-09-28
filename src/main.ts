@@ -8,8 +8,8 @@ import { json, urlencoded } from 'express';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(json({ limit: '50mb' }));  // Ajuste o limite de tamanho do JSON conforme necessário
-  app.use(urlencoded({ limit: '50mb', extended: true }));  // Ajuste o limite do URL-encoded
+  app.use(json({ limit: '50mb' })); 
+  app.use(urlencoded({ limit: '50mb', extended: true }));
 
   const options = {
     origin: "*",

@@ -19,7 +19,6 @@ export class AuthService {
     async generateJwtToken(userId: string, roles: Role[]) {
         const payload = { sub: userId, roles: roles }
 
-        console.log(payload)
 
         return await this.jwtService.signAsync(payload);
     }

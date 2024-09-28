@@ -5,9 +5,6 @@ export const httpExceptionHandler = (error: Error) => {
     if (error instanceof HttpException) {
         throw error;
     } else {
-        console.log('----------- Http Exception handler -----------')
-        console.log(error)
-        console.log('----------- end -----------')
         throw new InternalErrorException();
     }
 }
