@@ -16,6 +16,7 @@ import { ExportDeckToJsonUseCase } from "./application/use-case/export-deck-to-j
 import { ValidadeDeckUseCase } from "./application/use-case/validate-deck-use-case";
 import { GetAllUserDecksUseCase } from "./application/use-case/get-all-user-decks.use-case";
 import { CacheModule } from '@nestjs/cache-manager';
+import { GetAllDecksUseCase } from "./application/use-case/get-all-decks.use_case";
 
 @Module({
     imports: [
@@ -35,7 +36,8 @@ import { CacheModule } from '@nestjs/cache-manager';
         GetDeckByIdUseCase,
         ExportDeckToJsonUseCase,
         ValidadeDeckUseCase,
-        GetAllUserDecksUseCase
+        GetAllUserDecksUseCase,
+        GetAllDecksUseCase
     ],
     controllers: [
         CardController
