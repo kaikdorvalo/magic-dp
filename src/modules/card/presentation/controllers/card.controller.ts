@@ -15,6 +15,7 @@ import { Deck } from "../../domain/schemas/deck.schema";
 import { GetAllDecksUseCase } from "../../application/use-case/get-all-decks.use_case";
 import { Roles } from "src/modules/user/application/decorators/roles.decorator";
 import { Role } from "src/shared/enums/roles.enum";
+import { RolesGuard } from "src/modules/user/application/guards/roles.guard";
 
 @Controller('cards')
 @UseFilters(new HttpExceptionFilter())
@@ -28,7 +29,7 @@ export class CardController {
         private exportDeckToJsonUseCase: ExportDeckToJsonUseCase,
         private validadeDeckUseCase: ValidadeDeckUseCase,
         private getAllUserDecksUseCase: GetAllUserDecksUseCase,
-        private getAllDecksUseCase : GetAllDecksUseCase,
+        private getAllDecksUseCase: GetAllDecksUseCase,
 
         @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) { }
@@ -78,6 +79,7 @@ export class CardController {
 
     @Get('decks/get/getall')
     @Roles(Role.ADMIN)
+    @UseGuards(RolesGuard)
     async getAllDecks(@Res() response: Response) {
         const decks = await this.getAllDecksUseCase.execute();
         return response.status(decks.status).send(decks.data);
