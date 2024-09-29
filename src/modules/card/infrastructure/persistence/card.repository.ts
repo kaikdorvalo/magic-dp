@@ -28,4 +28,9 @@ export class CardRepositroy {
         const decks = await this.deckModel.find({ userId: userId });
         return decks;
     }
+
+    async getAllDecks(): Promise<Deck[] | null> {
+        const decks = await this.deckModel.find();
+        return decks;
+    }
 }
