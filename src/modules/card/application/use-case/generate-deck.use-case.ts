@@ -10,7 +10,7 @@ import { Repositories } from "../../../../shared/constants/repositories.constant
 import { CardRepositroy } from "../../infrastructure/persistence/card.repository";
 import { ResponseData } from "../../../../shared/utils/response-data";
 import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";
-import { UserRepository } from "src/modules/user/infrastructure/persistence/user.repository";
+import { UserRepository } from "../../../../modules/user/infrastructure/persistence/user.repository";
 
 @Injectable()
 export class GenerateDeckUseCase {

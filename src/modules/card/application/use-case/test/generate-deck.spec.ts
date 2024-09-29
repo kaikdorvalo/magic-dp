@@ -9,8 +9,8 @@ import { CardService } from "../../../../../modules/card/domain/services/card.se
 import { CardRepositroy } from "../../../infrastructure/persistence/card.repository"
 import { IUser } from "../../../../../modules/user/application/interfaces/user.interface"
 import { User } from "../../../../../modules/user/domain/schemas/user.schema"
-import { UserRepositoryImpl } from "../../../../user/infrastructure/persistence/user.repository"
 import { CreateDeckDto } from "../../../../../shared/dtos/card/create-deck.dto"
+import { UserRepository } from "../../../../../modules/user/infrastructure/persistence/user.repository"
 
 describe('Generate deck test', () => {
     const scryfallApi = new ScryfallApi()
@@ -29,7 +29,7 @@ describe('Generate deck test', () => {
     } as unknown as Model<User>
 
     const cardRepository = new CardRepositroy(cardModel)
-    const userRepository = new UserRepositoryImpl(userModel)
+    const userRepository = new UserRepository(userModel)
 
 
     const generateDeckUseCase = new GenerateDeckUseCase(
