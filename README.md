@@ -15,6 +15,10 @@ Para iniciar o projeto, clone o repositório e digite o seguinte comando
 npm run start:dev
 ```
 
+## Relatório de autocannon, cache e cluster
+
+Os relatórios estão na pasta relatorio_autocannon na raíz do projeto
+
 ## Endpoints
 ### 1. POST /cards/commander
 - Request Body:
@@ -50,3 +54,8 @@ Example Request Body:
 - Retrieves all decks in the system. This endpoint is restricted to users with the ADMIN role.
   - Authentication: Required.
   - Role: ADMIN.
+
+
+# Observações
+Para que o autocannon seja executado, alterações precisam ser feitas, como desabilitar a autenticação e simular sub de usuário válido
+
