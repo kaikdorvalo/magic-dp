@@ -1,5 +1,20 @@
 # CardController API - Documentation
 
+Este projeto foi realizado utilizando o framework Nestjs, em Nodejs
+
+# Banco de dados
+O banco de dados é o mongodb, sua connection string está predefinida no app.module, caso seja necessário alguma alteração
+
+# configurando o token JWT
+Crie um arquivo .env na raíz do projeto e cole nele tudo do arwuivo .env.example. Após isso, coloque uma string qualquer para o token
+
+# Iniciar o projeto
+Para iniciar o projeto, clone o repositório e digite o seguinte comando
+
+```bash
+npm run start:dev
+```
+
 ## Endpoints
 ### 1. POST /cards/commander
 - Request Body:
