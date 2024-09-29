@@ -19,7 +19,7 @@ npm run start:dev
 
 Os relatórios estão na pasta relatorio_autocannon na raíz do projeto
 
-## Endpoints
+## Endpoints requiridos na parte 2
 ### 1. POST /cards/commander
 - Request Body:
   - CreateDeckDto: Contains the information needed to create the deck, such as the commanderName and landsAmount.
