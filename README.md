@@ -9,7 +9,7 @@ O banco de dados é o mongodb, sua connection string está predefinida no app.mo
 Crie um arquivo .env na raíz do projeto e cole nele tudo do arwuivo .env.example. Após isso, coloque uma string qualquer para o token
 
 # Iniciar o projeto
-Para iniciar o projeto, clone o repositório e digite o seguinte comando
+Para iniciar o projeto, clone o repositório, instale as dependências com npm install e digite o seguinte comando
 
 ```bash
 npm run start:dev
