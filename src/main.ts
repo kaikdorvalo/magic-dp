@@ -4,6 +4,7 @@ import "reflect-metadata";
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe())
 
+  // await app.startAllMicroservices()
   await app.listen(3001);
 }
 bootstrap();

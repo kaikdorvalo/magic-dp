@@ -11,11 +11,13 @@ import { ValidadeDeckUseCase } from "../../application/use-case/validate-deck-us
 import { request } from "http";
 import { GetAllUserDecksUseCase } from "../../application/use-case/get-all-user-decks.use-case";
 import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Deck } from "../../domain/schemas/deck.schema";
+import { Card, Deck } from "../../domain/schemas/deck.schema";
 import { GetAllDecksUseCase } from "../../application/use-case/get-all-decks.use_case";
 import { Roles } from "src/modules/user/application/decorators/roles.decorator";
 import { Role } from "src/shared/enums/roles.enum";
 import { RolesGuard } from "src/modules/user/application/guards/roles.guard";
+import { ImportDeckAsyncUseCase } from "../../application/use-case/import-deck-async.use-case";
+import { SendDeckToProcessUseCase } from "../../application/use-case/send-deck-to-process.use-case";
 
 @Controller('cards')
 @UseFilters(new HttpExceptionFilter())
@@ -30,6 +32,8 @@ export class CardController {
         private validadeDeckUseCase: ValidadeDeckUseCase,
         private getAllUserDecksUseCase: GetAllUserDecksUseCase,
         private getAllDecksUseCase: GetAllDecksUseCase,
+        private importDeckAsyncUseCase: ImportDeckAsyncUseCase,
+        private sendDeckToProcees: SendDeckToProcessUseCase,
 
         @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) { }
@@ -58,6 +62,12 @@ export class CardController {
     @Post('validate')
     importDeck(@Body() deckJson: any) {
         return this.validadeDeckUseCase.execute(deckJson);
+    }
+
+    @Post('import')
+    async importDeckAsync(@Body() deckJson: Card[], @Res() response) {
+        const result = await this.sendDeckToProcees.execute(deckJson)
+        return response.status(result.status).send(result.data)
     }
 
     @Get('decks/get/all')
