@@ -12,11 +12,12 @@ export class SendDeckToProcessUseCase {
         private validateDeckUseCase: ValidadeDeckUseCase,
     ) { }
 
-    async execute(deck: Card[]) {
+    async execute(deck: Card[], userId: string) {
         try {
             this.validateDeckUseCase.execute(deck)
+            let cards = { userId: userId, cards: deck }
 
-            this.rabbitClient.emit('cards-placed', deck)
+            this.rabbitClient.emit('cards-placed', cards)
             return new ResponseData(
                 HttpStatus.OK,
                 'Deck received'

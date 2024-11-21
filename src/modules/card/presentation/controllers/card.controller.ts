@@ -70,15 +70,15 @@ export class CardController {
 
     @Post('import')
     @UseGuards(AuthGuard)
-    async importDeckAsync(@Body() deckJson: Card[], @Res() response) {
-        const result = await this.sendDeckToProcees.execute(deckJson)
+    async importDeckAsync(@Body() deckJson: Card[], @Res() response, @Req() request) {
+        const result = await this.sendDeckToProcees.execute(deckJson, request["user"].sub)
         return response.status(result.status).send(result.data)
     }
 
     @EventPattern("cards-placed")
-    async handleImportDeckPlaced(@Payload() cards: Card[]) {
-        console.log(cards[0].name)
-        const result = await this.importDeckAsyncUseCase.execute(cards)
+    async handleImportDeckPlaced(@Payload() cards: any) {
+        console.log(cards.cards[0].name)
+        const result = await this.importDeckAsyncUseCase.execute(cards.cards, cards.userId)
     }
 
     @Get('decks/get/all')

@@ -9,10 +9,10 @@ export class ImportDeckAsyncUseCase {
         private cardRepository: CardRepositroy
     ) { }
 
-    async execute(deck: Card[]) {
+    async execute(deck: Card[], userId: string) {
         let landsAmount = this.landsCounter(deck)
         let commanderName = deck[0].name
-        const result = this.persistDeck(deck[0], landsAmount, deck, '')
+        const result = this.persistDeck(deck[0], landsAmount, deck, userId)
     }
 
     private async persistDeck(commander: Card, landsAmount: number, deck: Card[], userId: string): Promise<any> {
