@@ -1,18 +1,20 @@
 import { Injectable } from "@nestjs/common";
-import { Card } from "../../domain/schemas/deck.schema";
+import { Card, Deck } from "../../domain/schemas/deck.schema";
 import { CardRepositroy } from "../../infrastructure/persistence/card.repository";
+import { SendImportedDeckMessage } from "./send-imported-deck-message.use-case";
 
 @Injectable()
 export class ImportDeckAsyncUseCase {
 
     constructor(
-        private cardRepository: CardRepositroy
+        private cardRepository: CardRepositroy,
+        private sendImportedDeckMessage: SendImportedDeckMessage
     ) { }
 
     async execute(deck: Card[], userId: string) {
         let landsAmount = this.landsCounter(deck)
-        let commanderName = deck[0].name
-        const result = this.persistDeck(deck[0], landsAmount, deck, userId)
+        const result = await this.persistDeck(deck[0], landsAmount, deck, userId)
+        this.sendImportedDeckMessage.execute(result._id)
     }
 
     private async persistDeck(commander: Card, landsAmount: number, deck: Card[], userId: string): Promise<any> {
@@ -23,7 +25,7 @@ export class ImportDeckAsyncUseCase {
             cards: deck
         });
 
-        const savedDeck = await this.cardRepository.saveDeck(newDeck);
+        const savedDeck: Deck = await this.cardRepository.saveDeck(newDeck);
 
         return savedDeck;
     }

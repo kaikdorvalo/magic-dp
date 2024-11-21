@@ -8,7 +8,7 @@ import { ValidadeDeckUseCase } from "./validate-deck-use-case";
 @Injectable()
 export class SendDeckToProcessUseCase {
     constructor(
-        @Inject("CARDS_SERVICE") private rabbitClient: ClientProxy,
+        @Inject("CARDS_IMPORT") private rabbitClient: ClientProxy,
         private validateDeckUseCase: ValidadeDeckUseCase,
     ) { }
 

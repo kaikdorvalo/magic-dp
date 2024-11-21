@@ -20,6 +20,7 @@ import { GetAllDecksUseCase } from "./application/use-case/get-all-decks.use_cas
 import { ImportDeckAsyncUseCase } from "./application/use-case/import-deck-async.use-case";
 import { SendDeckToProcessUseCase } from "./application/use-case/send-deck-to-process.use-case";
 import { RabbitMQModule } from "../rabbitmq/rabbitmq.module";
+import { SendImportedDeckMessage } from "./application/use-case/send-imported-deck-message.use-case";
 
 @Module({
     imports: [
@@ -44,6 +45,7 @@ import { RabbitMQModule } from "../rabbitmq/rabbitmq.module";
         GetAllDecksUseCase,
         ImportDeckAsyncUseCase,
         SendDeckToProcessUseCase,
+        SendImportedDeckMessage,
 
     ],
     controllers: [

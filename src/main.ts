@@ -39,6 +39,14 @@ async function bootstrap() {
     },
   });
 
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://localhost:5672'],
+      queue: 'deck_updates_queue',
+    },
+  });
+
   await app.startAllMicroservices()
   await app.listen(3001);
 }

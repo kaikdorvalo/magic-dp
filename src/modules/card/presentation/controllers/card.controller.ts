@@ -81,6 +81,11 @@ export class CardController {
         const result = await this.importDeckAsyncUseCase.execute(cards.cards, cards.userId)
     }
 
+    @EventPattern("deck-imported")
+    async handleImportedDeck(@Payload() deckId) {
+        console.log(deckId)
+    }
+
     @Get('decks/get/all')
     @UseGuards(AuthGuard)
     async getAllUserDecks(@Req() request: Request, @Res() response) {
