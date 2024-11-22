@@ -35,6 +35,11 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  websocket-client:
+    build: ./magic-dp/websocket-client/
+    depends_on:
+      - backend
+
 volumes:
   mongo-data:
   rabbitmq-data:
