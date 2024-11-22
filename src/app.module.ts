@@ -5,12 +5,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './modules/auth/auth.module';
 import { RabbitMQModule } from './modules/rabbitmq/rabbitmq.module';
 import { GatewayModule } from './modules/gateway/gateway.module';
+import "dotenv/config"
 
 @Module({
   imports: [
     GatewayModule,
     RabbitMQModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/magic_dp'),
+    MongooseModule.forRoot(process.env.MONGO_URL),
     UserModule,
     CardModule,
     AuthModule,
