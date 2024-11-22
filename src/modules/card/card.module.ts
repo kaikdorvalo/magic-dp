@@ -21,6 +21,7 @@ import { ImportDeckAsyncUseCase } from "./application/use-case/import-deck-async
 import { SendDeckToProcessUseCase } from "./application/use-case/send-deck-to-process.use-case";
 import { RabbitMQModule } from "../rabbitmq/rabbitmq.module";
 import { SendImportedDeckMessage } from "./application/use-case/send-imported-deck-message.use-case";
+import { GatewayModule } from "../gateway/gateway.module";
 
 @Module({
     imports: [
@@ -29,6 +30,7 @@ import { SendImportedDeckMessage } from "./application/use-case/send-imported-de
         MongooseModule.forFeature([{ name: Deck.name, schema: DeckSchema }]),
         CacheModule.register(),
         RabbitMQModule,
+        GatewayModule,
     ],
     providers: [
         ScryfallApi,

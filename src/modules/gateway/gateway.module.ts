@@ -4,6 +4,9 @@ import { Gateway } from "./gateway";
 @Module({
     providers: [
         Gateway
+    ],
+    exports: [
+        Gateway
     ]
 })
 export class GatewayModule { }

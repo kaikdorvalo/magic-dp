@@ -19,6 +19,7 @@ import { RolesGuard } from "src/modules/user/application/guards/roles.guard";
 import { ImportDeckAsyncUseCase } from "../../application/use-case/import-deck-async.use-case";
 import { SendDeckToProcessUseCase } from "../../application/use-case/send-deck-to-process.use-case";
 import { EventPattern, Payload } from "@nestjs/microservices";
+import { Gateway } from "src/modules/gateway/gateway";
 
 @Controller('cards')
 @UseFilters(new HttpExceptionFilter())
@@ -34,6 +35,8 @@ export class CardController {
         private getAllDecksUseCase: GetAllDecksUseCase,
         private importDeckAsyncUseCase: ImportDeckAsyncUseCase,
         private sendDeckToProcees: SendDeckToProcessUseCase,
+
+        private gateway: Gateway,
 
         @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) { }
@@ -77,13 +80,12 @@ export class CardController {
 
     @EventPattern("cards-placed")
     async handleImportDeckPlaced(@Payload() cards: any) {
-        console.log(cards.cards[0].name)
-        const result = await this.importDeckAsyncUseCase.execute(cards.cards, cards.userId)
+        await this.importDeckAsyncUseCase.execute(cards.cards, cards.userId)
     }
 
     @EventPattern("deck-imported")
     async handleImportedDeck(@Payload() deckId) {
-        console.log(deckId)
+        this.gateway.sendMessageToClient('cards-placed', `Deck importado. Id do deck: ${deckId}`)
     }
 
     @Get('decks/get/all')

@@ -3,28 +3,11 @@ import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from
 import { Server, Socket } from 'socket.io'
 
 @WebSocketGateway()
-export class Gateway implements OnModuleInit {
+export class Gateway {
     @WebSocketServer()
     server: Server
 
-    private clients = new Map<string, Socket>();
-
-    onModuleInit() {
-        this.server.on('connection', (socket) => {
-            console.log(socket.id)
-            console.log('Conectado')
-        })
-    }
-
-    @SubscribeMessage("newMessage")
-    onMessage(@MessageBody() body: any) {
-        console.log(body)
-    }
-
-    sendMessage(clientId: string, message: any) {
-        const client = this.clients.get(clientId);
-        if (client) {
-            client.emit('deck_imported', message);
-        }
+    sendMessageToClient(event: string, data: any) {
+        this.server.emit(event, data);
     }
 }
