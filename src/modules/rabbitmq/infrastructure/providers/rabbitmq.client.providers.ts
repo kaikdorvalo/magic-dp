@@ -1,5 +1,6 @@
 import { Provider } from "@nestjs/common";
 import { ClientProxyFactory, Transport } from "@nestjs/microservices";
+import "dotenv/config"
 
 export const rabbitMQImportDeckProvider: Provider = {
     provide: 'CARDS_IMPORT',
@@ -7,7 +8,7 @@ export const rabbitMQImportDeckProvider: Provider = {
         return ClientProxyFactory.create({
             transport: Transport.RMQ,
             options: {
-                urls: ['amqp://localhost:5672'],
+                urls: [process.env.RABBITMQ_URL],
                 queue: 'deck_import_queue',
             },
         });
@@ -20,7 +21,7 @@ export const rabbitMQImportedDeckProvider: Provider = {
         return ClientProxyFactory.create({
             transport: Transport.RMQ,
             options: {
-                urls: ['amqp://localhost:5672'],
+                urls: [process.env.RABBITMQ_URL],
                 queue: 'deck_updates_queue'
             }
         })

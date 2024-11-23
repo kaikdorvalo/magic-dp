@@ -1,19 +1,11 @@
 version: '3.8'
 
 services:
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
-
   rabbitmq:
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
 
@@ -24,9 +16,9 @@ services:
     depends_on:
       - mongo
       - rabbitmq
-      - redis
     environment:
       MONGO_URL: mongodb://mongo:27017/magic-dp
+      RABBITMQ_URL: 'amqp://rabbitmq:5672'
 
   mongo:
     image: mongo:latest
@@ -34,11 +26,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-
-  websocket-client:
-    build: ./magic-dp/websocket-client/
-    depends_on:
-      - backend
 
 volumes:
   mongo-data:
