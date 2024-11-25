@@ -17,9 +17,9 @@ export class SendDeckToProcessUseCase {
         try {
             this.validateDeckUseCase.execute(deck)
 
-            const priority = userRole.includes(Role.ADMIN) ? 10 : 1;
+            const userPriority = userRole.includes(Role.ADMIN) ? 10 : 1;
 
-            let cards = { userId: userId, priority, cards: deck }
+            let cards = { userId: userId, priority: userPriority, cards: deck }
 
             this.rabbitClient.emit('cards-placed', cards);
             return new ResponseData(
