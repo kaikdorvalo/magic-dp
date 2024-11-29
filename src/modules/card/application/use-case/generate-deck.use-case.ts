@@ -11,6 +11,7 @@ import { CardRepositroy } from "../../infrastructure/persistence/card.repository
 import { ResponseData } from "../../../../shared/utils/response-data";
 import { httpExceptionHandler } from "../../../../shared/utils/exception-handler";
 import { UserRepository } from "../../../../modules/user/infrastructure/persistence/user.repository";
+import { ClientProxy } from "@nestjs/microservices";
 
 @Injectable()
 export class GenerateDeckUseCase {
@@ -20,6 +21,8 @@ export class GenerateDeckUseCase {
         private readonly getCommanderUseCase: GetCommanderUseCase,
         private readonly getBasicLandsUseCase: GetBasicLandsByCommanderUseCase,
         private readonly getCardsByCommanderUseCase: GetCardsByCommanderUseCase,
+
+        @Inject('CARDS_NOTIFY') private rabbitClient: ClientProxy,
 
         private readonly cardRepository: CardRepositroy,
 
@@ -54,11 +57,14 @@ export class GenerateDeckUseCase {
 
             const savedDeck = await this.persistDeck(commander, lands.length, deck, user._id);
 
+            this.rabbitClient.emit('deck-notify', `Deck gerado com sucesso. Id do deck: ${savedDeck._id}`)
+
             return new ResponseData(
                 HttpStatus.CREATED,
                 savedDeck
             )
         } catch (err: any) {
+            this.rabbitClient.emit('deck-notify', `Erro ao gerar o deck.`)
             httpExceptionHandler(err)
         }
     }

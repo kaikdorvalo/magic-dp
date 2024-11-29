@@ -28,7 +28,7 @@ import { UserRepository } from "src/modules/user/infrastructure/persistence/user
 export class CardController {
 
     constructor(
-        private userRepository : UserRepository,
+        private userRepository: UserRepository,
         private generateDeckUseCase: GenerateDeckUseCase,
         private getDeckByIdUseCase: GetDeckByIdUseCase,
         private exportDeckToJsonUseCase: ExportDeckToJsonUseCase,
@@ -89,6 +89,11 @@ export class CardController {
     @EventPattern("deck-imported")
     async handleImportedDeck(@Payload() deckId) {
         this.gateway.sendMessageToClient('cards-placed', `Deck importado. Id do deck: ${deckId}`)
+    }
+
+    @EventPattern("deck-notify")
+    async handleDeckNotify(@Payload() text) {
+        // fazer o envio da mensagem para o websocket
     }
 
     @Get('decks/get/all')
