@@ -92,8 +92,8 @@ export class CardController {
     }
 
     @EventPattern("deck-notify")
-    async handleDeckNotify(@Payload() text) {
-        // fazer o envio da mensagem para o websocket
+    async handleDeckNotify(@Payload() text: string) {
+        this.gateway.sendMessageToClient('deck-notify', text);
     }
 
     @Get('decks/get/all')
