@@ -37,7 +37,12 @@ O arquivo está em formato json e deve ser importado no Insomnia.
 1. Primeiramente, comece criando usuário com a rota "Create user"
 2. Faça o login com a rota "Login"
 
-O token de acesso está configurado dinamicamente após realizar o login, mas caso não funcione deverá ser feito manualmente para que as requests funcionem.
+O token de acesso está configurado dinamicamente, porém será necessário identificar a rota de Login em cada uma das rotas após importar o arquivo do insomnia. Para isso, faça o seguinte:
+
+1. Depois de enviar a request de Login, acesse cada uma das rotas realizando os passo baixo:
+2. acesse o menu auth
+3. clique na tarja vermelha no campo token
+4. No terceiro campo, chamado Request, selecione a opção POST Login
 
 # Quais rotas são de quais requisitos da issue?
 
