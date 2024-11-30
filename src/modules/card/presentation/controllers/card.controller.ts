@@ -20,6 +20,7 @@ import { ImportDeckAsyncUseCase } from "../../application/use-case/import-deck-a
 import { SendDeckToProcessUseCase } from "../../application/use-case/send-deck-to-process.use-case";
 import { EventPattern, Payload } from "@nestjs/microservices";
 import { Gateway } from "src/modules/gateway/gateway";
+import { UserRepository } from "src/modules/user/infrastructure/persistence/user.repository";
 
 @Controller('cards')
 @UseFilters(new HttpExceptionFilter())
@@ -27,6 +28,7 @@ import { Gateway } from "src/modules/gateway/gateway";
 export class CardController {
 
     constructor(
+        private userRepository : UserRepository,
         private generateDeckUseCase: GenerateDeckUseCase,
         private getDeckByIdUseCase: GetDeckByIdUseCase,
         private exportDeckToJsonUseCase: ExportDeckToJsonUseCase,
@@ -74,7 +76,8 @@ export class CardController {
     @Post('import')
     @UseGuards(AuthGuard)
     async importDeckAsync(@Body() deckJson: Card[], @Res() response, @Req() request) {
-        const result = await this.sendDeckToProcees.execute(deckJson, request["user"].sub)
+        const user = await this.userRepository.getUserById(request["user"].sub)
+        const result = await this.sendDeckToProcees.execute(deckJson, request["user"].sub, user.roles)
         return response.status(result.status).send(result.data)
     }
 

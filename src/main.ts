@@ -37,6 +37,11 @@ async function bootstrap() {
     options: {
       urls: [process.env.RABBITMQ_URL],
       queue: 'deck_import_queue',
+      queueOptions: {
+        arguments: {
+          'x-max-priority': 10,
+        },
+      },
     },
   });
 
