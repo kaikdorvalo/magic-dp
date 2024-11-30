@@ -1,4 +1,4 @@
-import { io } from "socket.io-client"
+import { io } from "socket.io-client";
 
 const socket = io('http://localhost:3001');
 
@@ -8,4 +8,8 @@ socket.on('connect', () => {
 
 socket.on('cards-placed', (message) => {
     console.log(message);
+});
+
+socket.on('deck-notify', (message) => {
+    console.log('Notificação recebida:', message);
 });
