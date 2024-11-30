@@ -8,14 +8,20 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck: 
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 10s
 
   backend:
     build: .
     ports:
       - "3001:3001"
     depends_on:
-      - mongo
-      - rabbitmq
+      mongo:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     environment:
       MONGO_URL: mongodb://mongo:27017/magic-dp
       RABBITMQ_URL: 'amqp://rabbitmq:5672'
