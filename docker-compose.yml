@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  backend:
+    build: .
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      MONGO_URL: mongodb://mongo:27017/magic-dp
+      RABBITMQ_URL: 'amqp://rabbitmq:5672'
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+  rabbitmq-data:

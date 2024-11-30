@@ -4,6 +4,8 @@ import "reflect-metadata";
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import "dotenv/config"
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +32,23 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe())
 
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_URL],
+      queue: 'deck_import_queue',
+    },
+  });
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_URL],
+      queue: 'deck_updates_queue',
+    },
+  });
+
+  await app.startAllMicroservices()
   await app.listen(3001);
 }
 bootstrap();

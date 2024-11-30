@@ -17,13 +17,20 @@ import { ValidadeDeckUseCase } from "./application/use-case/validate-deck-use-ca
 import { GetAllUserDecksUseCase } from "./application/use-case/get-all-user-decks.use-case";
 import { CacheModule } from '@nestjs/cache-manager';
 import { GetAllDecksUseCase } from "./application/use-case/get-all-decks.use_case";
+import { ImportDeckAsyncUseCase } from "./application/use-case/import-deck-async.use-case";
+import { SendDeckToProcessUseCase } from "./application/use-case/send-deck-to-process.use-case";
+import { RabbitMQModule } from "../rabbitmq/rabbitmq.module";
+import { SendImportedDeckMessage } from "./application/use-case/send-imported-deck-message.use-case";
+import { GatewayModule } from "../gateway/gateway.module";
 
 @Module({
     imports: [
         AuthModule,
         UserModule,
         MongooseModule.forFeature([{ name: Deck.name, schema: DeckSchema }]),
-        CacheModule.register()
+        CacheModule.register(),
+        RabbitMQModule,
+        GatewayModule,
     ],
     providers: [
         ScryfallApi,
@@ -37,7 +44,11 @@ import { GetAllDecksUseCase } from "./application/use-case/get-all-decks.use_cas
         ExportDeckToJsonUseCase,
         ValidadeDeckUseCase,
         GetAllUserDecksUseCase,
-        GetAllDecksUseCase
+        GetAllDecksUseCase,
+        ImportDeckAsyncUseCase,
+        SendDeckToProcessUseCase,
+        SendImportedDeckMessage,
+
     ],
     controllers: [
         CardController

@@ -11,15 +11,18 @@ import { ValidadeDeckUseCase } from "../../application/use-case/validate-deck-us
 import { request } from "http";
 import { GetAllUserDecksUseCase } from "../../application/use-case/get-all-user-decks.use-case";
 import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Deck } from "../../domain/schemas/deck.schema";
+import { Card, Deck } from "../../domain/schemas/deck.schema";
 import { GetAllDecksUseCase } from "../../application/use-case/get-all-decks.use_case";
 import { Roles } from "src/modules/user/application/decorators/roles.decorator";
 import { Role } from "src/shared/enums/roles.enum";
 import { RolesGuard } from "src/modules/user/application/guards/roles.guard";
+import { ImportDeckAsyncUseCase } from "../../application/use-case/import-deck-async.use-case";
+import { SendDeckToProcessUseCase } from "../../application/use-case/send-deck-to-process.use-case";
+import { EventPattern, Payload } from "@nestjs/microservices";
+import { Gateway } from "src/modules/gateway/gateway";
 
 @Controller('cards')
 @UseFilters(new HttpExceptionFilter())
-@UseGuards(AuthGuard)
 @ApiTags('Cards')
 export class CardController {
 
@@ -30,6 +33,10 @@ export class CardController {
         private validadeDeckUseCase: ValidadeDeckUseCase,
         private getAllUserDecksUseCase: GetAllUserDecksUseCase,
         private getAllDecksUseCase: GetAllDecksUseCase,
+        private importDeckAsyncUseCase: ImportDeckAsyncUseCase,
+        private sendDeckToProcees: SendDeckToProcessUseCase,
+
+        private gateway: Gateway,
 
         @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) { }
@@ -38,29 +45,51 @@ export class CardController {
     @ApiBody({
         type: CreateDeckDto
     })
+    @UseGuards(AuthGuard)
     async createDeck(@Body() createDeckDto: CreateDeckDto, @Req() request: Request, @Res() response: Response) {
         const result = await this.generateDeckUseCase.execute(createDeckDto, request["user"].sub);
         return response.send(result)
     }
 
     @Get('decks/:id')
+    @UseGuards(AuthGuard)
     async getDeckById(@Param('id') id: string, @Req() request: Request, @Res() response: Response) {
         const result = await this.getDeckByIdUseCase.execute(id, request["user"].sub);
         return response.status(result.status).send(result.data);
     }
 
     @Get('decks/exports/:id')
+    @UseGuards(AuthGuard)
     async exportDeckToJson(@Param('id') id: string, @Req() request: Request, @Res() response: Response) {
         const result = await this.exportDeckToJsonUseCase.execute(id, request["user"].sub);
         return response.status(result.status).send(result.data)
     }
 
     @Post('validate')
+    @UseGuards(AuthGuard)
     importDeck(@Body() deckJson: any) {
         return this.validadeDeckUseCase.execute(deckJson);
     }
 
+    @Post('import')
+    @UseGuards(AuthGuard)
+    async importDeckAsync(@Body() deckJson: Card[], @Res() response, @Req() request) {
+        const result = await this.sendDeckToProcees.execute(deckJson, request["user"].sub)
+        return response.status(result.status).send(result.data)
+    }
+
+    @EventPattern("cards-placed")
+    async handleImportDeckPlaced(@Payload() cards: any) {
+        await this.importDeckAsyncUseCase.execute(cards.cards, cards.userId)
+    }
+
+    @EventPattern("deck-imported")
+    async handleImportedDeck(@Payload() deckId) {
+        this.gateway.sendMessageToClient('cards-placed', `Deck importado. Id do deck: ${deckId}`)
+    }
+
     @Get('decks/get/all')
+    @UseGuards(AuthGuard)
     async getAllUserDecks(@Req() request: Request, @Res() response) {
         const cache: Deck[] = await this.cacheManager.get('user_cards')
         if (cache) {
@@ -80,6 +109,7 @@ export class CardController {
     @Get('decks/get/getall')
     @Roles(Role.ADMIN)
     @UseGuards(RolesGuard)
+    @UseGuards(AuthGuard)
     async getAllDecks(@Res() response: Response) {
         const decks = await this.getAllDecksUseCase.execute();
         return response.status(decks.status).send(decks.data);

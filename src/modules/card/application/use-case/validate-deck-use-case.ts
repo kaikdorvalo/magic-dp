@@ -9,21 +9,21 @@ import { httpExceptionHandler } from "src/shared/utils/exception-handler";
 export class ValidadeDeckUseCase {
   execute(deckJson: any) {
     try {
-      if (!deckJson || !deckJson.cards || deckJson.cards.length !== 100) {
+      if (!deckJson || deckJson.length !== 100) {
         throw new WrongNumberOfCardsException();
       }
 
-      const commander = deckJson.cards[0];
-      const deck = deckJson.cards;
+      const commander = deckJson[0];
+      const deck = deckJson;
 
       if (!commander.type_line.includes('Legendary Creature')) {
         throw new NotCommanderException();
       }
 
-      const commanderColorIdentity = commander.color_identity;
+      const commanderColorIdentity = commander.colors;
 
       for (const card of deck.filter(card => ['Creature', 'Artifact', 'Enchantment', 'Planeswalker', 'Battle'].some(type => card.type_line.includes(type)))) {
-        if (card.color_identity.some((color) => !commanderColorIdentity.includes(color))) {
+        if (!card.color_identity.some((color) => commanderColorIdentity.includes(color))) {
           throw new ImcompatibleCardColorException();
         }
       }
